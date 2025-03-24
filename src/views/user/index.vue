@@ -6,11 +6,13 @@ import Modal from "@/components/widgets/Modal.vue";
 import ImageCropper from "@/components/widgets/cropper";
 import InputField from "@/components/widgets/input";
 import Button from "@/components/widgets/button"
+import { required, email, minLength } from "@vuelidate/validators"; // Import Validator
 import {
     showSuccessToast,
     showErrorToast,
     showDeleteConfirmationDialog,
 } from "@/helpers/alert.js";
+import useVuelidate from "@vuelidate/core";
 
 const rows = ref([]);
 const userStore = useUserStore();
@@ -36,6 +38,12 @@ onMounted(() => {
     getUsers();
 });
 
+// ** Aturan Validasi **
+const rules = {
+    name: { required },
+    email: { required, email },
+    password: { required, minLength: minLength(6) }, // Min 6 karakter
+};
 
 const imageUrl = ref("");
 const croppedImageUrl = ref("");
@@ -82,7 +90,15 @@ const afterCloseUserModal = () => {
 const statusCode = computed(() => userStore.response.status);
 const errorList = computed(() => userStore.response?.error || {});
 const errorMessage = computed(() => userStore.response?.message || "");
+const v$ = useVuelidate(rules, formModel);
+
 const saveUser = async () => {
+
+    const isValid = await v$.value.$validate(); // Cek validasi
+    if (!isValid) {
+        showErrorToast("Periksa kembali inputan Anda.");
+        return;
+    }
     try {
         if (formModel.id) {
             await userStore.updateUser(formModel);
@@ -186,18 +202,36 @@ const options = [
                                 <div class="mb-4">
                                     <InputField v-model="formModel.name" label="Nama" type="text"
                                         placeholder="Masukkan Nama" name="name" :errors="errorList?.name" />
+
+                                    <div v-if="v$.name.$error" class="text-red-500 text-xs">
+                                        <span v-for="(err, index) in v$.name.$errors" :key="index">
+                                            {{ err.$message }}
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <!-- Input Email -->
                                 <div class="mb-4">
                                     <InputField v-model="formModel.email" label="Email" type="email"
                                         placeholder="Masukkan Email" name="email" :errors="errorList?.email" />
+
+                                    <div v-if="v$.email.$error" class="text-red-500 text-xs">
+                                        <span v-for="(err, index) in v$.email.$errors" :key="index">
+                                            {{ err.$message }}
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <!-- Input Password -->
                                 <div class="mb-4">
                                     <InputField v-model="formModel.password" label="Password" type="password"
                                         placeholder="Masukkan Password" name="password" :errors="errorList?.password" />
+
+                                    <div v-if="v$.password.$error" class="text-red-500 text-xs">
+                                        <span v-for="(err, index) in v$.password.$errors" :key="index">
+                                            {{ err.$message }}
+                                        </span>
+                                    </div>
                                 </div>
                             </template>
 
