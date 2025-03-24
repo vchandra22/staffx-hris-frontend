@@ -17,7 +17,17 @@ import {
 } from "@/components/ui/card";
 
 const showPassword = ref(false);
-const mode = useColorMode();
+const mode = useColorMode({
+  emitAuto: false, // Supaya tidak otomatis pakai sistem OS
+  modes: {
+    light: "light",
+    dark: "dark",
+  },
+});
+
+if (!mode.value) {
+  mode.value = "light"; // Set default ke "light"
+}
 const router = useRouter();
 const userStore = useUserStore();
 const statusCode = computed(() => userStore.response.status);
@@ -78,8 +88,7 @@ const register = async () => {
                 >
                     <HeartHandshake class="size-4" />
                 </div>
-                Titipin.
-            </a>
+                venturo.ida>
             <Card>
                 <CardHeader class="text-center">
                     <CardTitle class="text-xl">Create your account</CardTitle>
@@ -135,7 +144,7 @@ const register = async () => {
                                         v-model="formModel.email"
                                         id="email"
                                         type="email"
-                                        placeholder="mail@titipin.com"
+                                        placeholder="mail@venturo.id"
                                         required
                                     />
                                 </div>

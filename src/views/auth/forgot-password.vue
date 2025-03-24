@@ -6,7 +6,17 @@ import { useColorMode } from "@vueuse/core";
 import { Toaster, toast } from "vue-sonner";
 import { mdiGoogle } from "@mdi/js";
 
-const mode = useColorMode();
+const mode = useColorMode({
+  emitAuto: false, // Supaya tidak otomatis pakai sistem OS
+  modes: {
+    light: "light",
+    dark: "dark",
+  },
+});
+
+if (!mode.value) {
+  mode.value = "light"; // Set default ke "light"
+}
 const router = useRouter();
 const authStore = useAuthStore();
 const statusCode = computed(() => authStore.response.status);

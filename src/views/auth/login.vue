@@ -7,7 +7,17 @@ import { Toaster, toast } from "vue-sonner";
 import { mdiEye, mdiEyeOff, mdiGoogle } from "@mdi/js";
 
 const showPassword = ref(false);
-const mode = useColorMode();
+const mode = useColorMode({
+  emitAuto: false, // Supaya tidak otomatis pakai sistem OS
+  modes: {
+    light: "light",
+    dark: "dark",
+  },
+});
+
+if (!mode.value) {
+  mode.value = "light"; // Set default ke "light"
+}
 const router = useRouter();
 const authStore = useAuthStore();
 const statusCode = computed(() => authStore.response.status);

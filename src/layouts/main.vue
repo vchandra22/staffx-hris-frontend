@@ -12,7 +12,17 @@ import {
     mdiWhiteBalanceSunny
 } from "@mdi/js";
 
-const mode = useColorMode();
+const mode = useColorMode({
+  emitAuto: false, // Supaya tidak otomatis pakai sistem OS
+  modes: {
+    light: "light",
+    dark: "dark",
+  },
+});
+
+if (!mode.value) {
+  mode.value = "light"; // Set default ke "light"
+}
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
@@ -20,6 +30,7 @@ const showMenu = ref(false);
 const userRole = computed(() => authStore.getUser()?.role || "user");
 
 const toggleTheme = () => {
+    console.log(mode.value)
     mode.value = mode.value === "dark" ? "light" : "dark";
 };
 const logout = async () => {

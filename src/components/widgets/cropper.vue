@@ -16,13 +16,20 @@
   </div>
 
   <!-- Modal Cropper -->
-  <Modal ref="cropperModal" @close="afterCloseCropperModal">
+  <Modal ref="cropperModal" size="xl" @close="afterCloseCropperModal">
     <template #title>
       <h1 class="text-xl text-slate-800 font-bold">Crop Image</h1>
     </template>
     <template #body>
-      <vue-cropper v-if="localImageUrl" ref="cropper" :src="localImageUrl" :aspect-ratio="aspectRatio" :view-mode="1"
-        :auto-crop-area="1" :background="false" :guides="false" class="w-full" />
+      <!-- Input untuk aspect ratio jika input -->
+      <div v-if="inputAspectRatio" class="flex gap-2 mb-4">
+        <InputField v-model.number="inputAspectX" label="Width" type="number" placeholder="Masukkan lebar"
+          name="aspectX" />
+        <InputField v-model.number="inputAspectY" label="Height" type="number" placeholder="Masukkan tinggi"
+          name="aspectY" />
+      </div>
+      <vue-cropper v-if="tempImageUrl" ref="cropper" :src="tempImageUrl" :aspect-ratio="computedAspectRatio"
+        :view-mode="1" :auto-crop-area="1" :background="false" :guides="false" class="w-full" />
     </template>
     <template #footer>
       <button @click="closeCropperModal"
@@ -53,12 +60,14 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import Modal from "@/components/widgets/Modal.vue";
 import { mdiTrashCan } from '@mdi/js';
+import InputField from "@/components/widgets/input";
 
 export default {
   name: "ImageCropper",
   components: {
     VueCropper,
     Modal,
+    InputField
   },
 
   props: {
@@ -66,8 +75,9 @@ export default {
     croppedImageUrl: String, // Gambar yang sudah dicrop
     aspectRatio: { type: Number, default: 1 },
     uploadText: { type: String, default: "Letakkan gambar disini atau klik untuk mengunggah" },
+    inputAspectRatio: { type: Boolean, default: false },
   },
-  
+
   data() {
     return {
       isDragging: false,
@@ -75,7 +85,16 @@ export default {
       localImageUrl: null, // Gambar yang akan dicrop
       localCroppedImageUrl: null, // Gambar hasil crop
       mdiTrashCan,
+      inputAspectX: 1, // Nilai default untuk X
+      inputAspectY: 1, // Nilai default untuk Y
     };
+  },
+  computed: {
+    computedAspectRatio() {
+      return this.inputAspectRatio && this.inputAspectX > 0 && this.inputAspectY > 0
+        ? this.inputAspectX / this.inputAspectY
+        : this.aspectRatio;
+    }
   },
 
   watch: {
@@ -93,6 +112,12 @@ export default {
     },
     localCroppedImageUrl(newVal) {
       this.$emit("update:croppedImageUrl", newVal);
+    },
+    inputAspectX() {
+      this.updateCropperAspectRatio();
+    },
+    inputAspectY() {
+      this.updateCropperAspectRatio();
     },
   },
 
@@ -120,7 +145,7 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        this.localImageUrl = URL.createObjectURL(file);
+        this.tempImageUrl = URL.createObjectURL(file);
         this.openCropperModal();
       }
     },
@@ -129,6 +154,7 @@ export default {
       if (canvas) {
         this.localCroppedImageUrl = canvas.toDataURL("image/png");
       }
+      this.tempImageUrl = null; // Hapus gambar sementara setelah crop
       this.closeCropperModal();
     },
     clearCroppedImage() {
@@ -142,6 +168,12 @@ export default {
       this.$refs.cropperModal.closeModal();
     },
     afterCloseCropperModal() {
+    },
+
+    updateCropperAspectRatio() {
+      if (this.$refs.cropper) {
+        this.$refs.cropper.setAspectRatio(this.computedAspectRatio);
+      }
     },
   },
 };

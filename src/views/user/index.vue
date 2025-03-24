@@ -5,6 +5,7 @@ import Layout from "@/layouts/main.vue";
 import Modal from "@/components/widgets/Modal.vue";
 import ImageCropper from "@/components/widgets/cropper";
 import InputField from "@/components/widgets/input";
+import Button from "@/components/widgets/button"
 import {
     showSuccessToast,
     showErrorToast,
@@ -124,9 +125,9 @@ const deleteUser = async (id) => {
 };
 
 const options = [
-  { label: "Option 1", value: "option1" },
-  { label: "Option 2", value: "option2" },
-  { label: "Option 3", value: "option3" },
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+    { label: "Option 3", value: "option3" },
 ];
 </script>
 
@@ -148,20 +149,15 @@ const options = [
                     <div class="flex data-[orientation=horizontal]:flex-col data-[orientation=vertical]:flex-row gap-2"
                         data-orientation="horizontal">
                         <div class="relative w-full md:w-72">
-                            <InputField 
-                                v-model="userStore.searchQuery"
-                                placeholder="Search..."
-                                name="search"
-                                @input="searchData"
-                            />
+                            <InputField v-model="userStore.searchQuery" placeholder="Search..." name="search"
+                                @input="searchData" />
                         </div>
                     </div>
                     <div class="w-full md:w-72 flex justify-end">
                         <!-- Tombol trigger modal -->
-                        <button @click="openUserModal('add')"
-                            class="border text-sm rounded-md py-2 px-3 bg-gray-800 text-gray-50 hover:bg-gray-700">
+                        <Button @click="openUserModal('add')" variant="solid" color="primary">
                             Tambah User
-                        </button>
+                        </Button>
 
                         <!-- Modal -->
                         <Modal ref="userModalRef" @close="afterCloseUserModal">
@@ -175,7 +171,7 @@ const options = [
                                 <!-- Input Foto -->
                                 <div class="mb-4">
                                     <label class="text-sm text-slate-800 font-bold mb-2">Foto</label>
-                                    <ImageCropper :imageUrl="imageUrl" :aspectRatio="1 / 1"
+                                    <ImageCropper :imageUrl="imageUrl" :aspectRatio="16 / 9" :inputAspectRatio="true"
                                         uploadText="Letakkan foto disini atau klik untuk mengunggah"
                                         @update:imageUrl="imageUrl = $event"
                                         @update:croppedImageUrl="croppedImageUrl = $event; formModel.photo = $event;" />
@@ -188,51 +184,32 @@ const options = [
 
                                 <!-- Input Nama -->
                                 <div class="mb-4">
-                                <InputField label="textarea" placeholder="Masukkan textarea"
-                                    type="textarea"/>
-                                </div>
-                                <div class="mb-4">
-                                <InputField label="checkbox" placeholder="Masukkan checkbox" :options="options"
-                                    type="checkbox"/>
-                                </div>
-                                <div class="mb-4">
-                                <InputField label="radio" placeholder="Masukkan radio" :options="options"
-                                    type="radio"/>
-                                </div>
-                                <div class="mb-4">
-                                <InputField label="select" placeholder="Masukkan select" :options="options"
-                                    type="select"/>
-                                </div>
-
-                                <!-- Input Nama -->
-                                <div class="mb-4">
-                                <InputField v-model="formModel.name" label="Nama" type="text" placeholder="Masukkan Nama"
-                                    name="name" :errors="errorList?.name" />
+                                    <InputField v-model="formModel.name" label="Nama" type="text"
+                                        placeholder="Masukkan Nama" name="name" :errors="errorList?.name" />
                                 </div>
 
                                 <!-- Input Email -->
                                 <div class="mb-4">
-                                <InputField v-model="formModel.email" label="Email" type="email"
-                                    placeholder="Masukkan Email" name="email" :errors="errorList?.email" />
+                                    <InputField v-model="formModel.email" label="Email" type="email"
+                                        placeholder="Masukkan Email" name="email" :errors="errorList?.email" />
                                 </div>
 
                                 <!-- Input Password -->
                                 <div class="mb-4">
-                                <InputField v-model="formModel.password" label="Password" type="password"
-                                    placeholder="Masukkan Password" name="password" :errors="errorList?.password" />
+                                    <InputField v-model="formModel.password" label="Password" type="password"
+                                        placeholder="Masukkan Password" name="password" :errors="errorList?.password" />
                                 </div>
                             </template>
 
                             <!-- Slot Footer (Tombol Simpan) -->
                             <template #footer>
-                                <button @click="closeUserModal"
-                                    class="inline-flex items-center justify-center border border-gray-800 text-gray-800 bg-transparent align-middle select-none font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed text-sm rounded-md py-2 px-4 shadow-sm hover:shadow-md hover:bg-gray-100">
+                                <Button @click="closeUserModal" variant="outline" color="secondary">
                                     Close
-                                </button>
-                                <button type="button" @click="saveUser"
-                                    class="inline-flex items-center justify-center border align-middle select-none font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm rounded-md py-2 px-4 shadow-sm hover:shadow-md bg-slate-800 border-slate-800 text-slate-50 hover:bg-slate-700 hover:border-slate-700">
+                                </Button>
+
+                                <Button @click="saveUser" variant="solid" color="primary">
                                     Submit
-                                </button>
+                                </Button>
                             </template>
                         </Modal>
 
@@ -273,20 +250,15 @@ const options = [
                                     <td class="p-3">
                                         <div class="flex gap-2 justify-end">
                                             <!-- Tombol Edit -->
-                                            <button data-open="false" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-800 
-                    transition-all duration-300 ease-in border rounded-md shadow-sm outline-none 
-                    bg-transparent border-transparent hover:bg-gray-200/50 hover:border-gray-400/30
-                    disabled:opacity-50 disabled:pointer-events-none" @click="openUserModal('edit', row.id)">
+                                            <Button @click="openUserModal('edit', row.id)" variant="outline"
+                                                color="secondary">
                                                 Edit
-                                            </button>
+                                            </Button>
 
                                             <!-- Tombol Delete -->
-                                            <button @click="deleteUser(row.id)" data-open="false" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-red-600
-                    transition-all duration-300 ease-in border rounded-md shadow-sm outline-none 
-                    bg-transparent border-transparent hover:bg-red-100 hover:border-red-400/50
-                    disabled:opacity-50 disabled:pointer-events-none">
+                                            <Button @click="deleteUser(row.id)" variant="outline" color="error">
                                                 Delete
-                                            </button>
+                                            </Button>
                                         </div>
                                     </td>
                                 </tr>
