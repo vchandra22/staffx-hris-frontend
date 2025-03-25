@@ -60,7 +60,7 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import Modal from "@/components/widgets/Modal.vue";
 import { mdiTrashCan } from '@mdi/js';
-import InputField from "@/components/widgets/input";
+import InputField from "@/components/widgets/Input";
 
 export default {
   name: "ImageCropper",

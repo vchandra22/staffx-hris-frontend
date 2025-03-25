@@ -1,8 +1,9 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useColorMode } from "@vueuse/core";
 import { useAuthStore } from "@/state/pinia";
+import  Menu from './navigation.vue';
 import {
     mdiHome,
     mdiAccountGroup,
@@ -20,9 +21,17 @@ const mode = useColorMode({
   },
 });
 
-if (!mode.value) {
-  mode.value = "light"; // Set default ke "light"
+
+// **Set mode default ke light jika belum diatur sebelumnya**
+if (!localStorage.getItem("vueuse-color-scheme") || localStorage.getItem("vueuse-color-scheme") !== 'light') {
+  mode.value = "light";
 }
+
+// **Pantau perubahan mode dan simpan ke localStorage**
+watch(mode, (newMode) => {
+  localStorage.setItem("vueuse-color-scheme", newMode);
+});
+
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
@@ -30,7 +39,6 @@ const showMenu = ref(false);
 const userRole = computed(() => authStore.getUser()?.role || "user");
 
 const toggleTheme = () => {
-    console.log(mode.value)
     mode.value = mode.value === "dark" ? "light" : "dark";
 };
 const logout = async () => {
@@ -42,7 +50,7 @@ const logout = async () => {
 <template>
     <div class="grid min-h-screen w-full grid-rows-[auto_auto_1fr]">
         <!-- Navbar Baris 1 -->
-        <header class="flex h-14 lg:h-[60px] items-center justify-between border-b bg-gray-100 dark:bg-gray-900 px-4 lg:px-6">
+        <header class="fixed top-0 left-0 w-full z-50 flex h-14 lg:h-[60px] items-center justify-between border-b bg-gray-100 dark:bg-gray-900 px-4 lg:px-6">
             <!-- Logo -->
             <a href="/dashboard" class="flex items-center gap-2 font-semibold">
                 <img src="../assets/logo-venturo.webp" class="w-32 h-auto">
@@ -51,11 +59,11 @@ const logout = async () => {
             <!-- Right Section (Theme Toggle + User Menu) -->
             <div class="flex items-center gap-4">
                 <!-- Toggle Theme -->
-                <button @click="toggleTheme" class="p-2 rounded-full bg-gray-300 dark:bg-gray-700">
+                <!-- <button @click="toggleTheme" class="p-2 rounded-full bg-gray-300 dark:bg-gray-700">
                     <svg class="h-5 w-5" viewBox="0 0 24 24">
                         <path :d="mode === 'light' ? mdiWeatherNight : mdiWhiteBalanceSunny" />
                     </svg>
-                </button>
+                </button> -->
 
                 <!-- User Dropdown -->
                 <div class="dropdown relative">
@@ -79,26 +87,9 @@ const logout = async () => {
         </header>
 
         <!-- Navbar Baris 2 (Menu Navigasi) -->
-        <div class="flex h-14 lg:h-[60px] items-center justify-start border-b bg-primary dark:bg-gray-900 px-4 lg:px-6">
-            <nav class="flex gap-6 text-sm font-semibold text-white">
-                <router-link to="/dashboard"
-                    class="flex items-center gap-2 px-3 py-2 rounded-lg transition"
-                    :class="{ 'bg-gray-300 dark:bg-gray-700 text-primary': route.path === '/dashboard' }">
-                    <svg class="h-5 w-5 text-white" viewBox="0 0 24 24">
-                        <path :d="mdiHome" />
-                    </svg> Dashboard
-                </router-link>
-                <router-link to="/user"
-                    class="flex items-center gap-2 px-3 py-2 rounded-lg transition"
-                    :class="{ 'bg-gray-200 dark:bg-gray-700 text-primary': route.path === '/user' }">
-                    <svg class="h-5 w-5 text-white" viewBox="0 0 24 24">
-                        <path :d="mdiAccountGroup" />
-                    </svg> Users
-                </router-link>
-            </nav>
-        </div>
+        <Menu class="fixed top-14 left-0 w-full z-40 shadow-md"/>
         <!-- Main Content -->
-        <main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 pt-[128px] lg:pt-[128px]">
             <slot />
         </main>
     </div>

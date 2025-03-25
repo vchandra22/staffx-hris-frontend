@@ -11,6 +11,8 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import "@vuepic/vue-datepicker/dist/main.css";
 import "@vueform/multiselect/themes/default.css";
 import "@vueform/slider/themes/default.css";
+import 'quill/dist/quill.snow.css';
+
 import { registerScrollSpy } from "vue3-scroll-spy";
 import { vMaska } from "maska";
 import { Money3Directive } from "v-money3";

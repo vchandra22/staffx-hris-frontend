@@ -1,150 +1,70 @@
 <script setup>
 import { useUserStore } from "@/state/pinia";
-import { ref, onMounted, reactive, computed } from "vue";
+import { ref, onMounted } from "vue";
 import Layout from "@/layouts/main.vue";
 import Modal from "@/components/widgets/Modal.vue";
-import ImageCropper from "@/components/widgets/cropper";
-import InputField from "@/components/widgets/input";
-import Button from "@/components/widgets/button"
-import { required, email, minLength } from "@vuelidate/validators"; // Import Validator
-import {
-    showSuccessToast,
-    showErrorToast,
-    showDeleteConfirmationDialog,
-} from "@/helpers/alert.js";
-import useVuelidate from "@vuelidate/core";
+import Button from "@/components/widgets/Button";
+import InputField from "@/components/widgets/Input";
+import FormUser from "@/views/user/form.vue"; // Import file FormUser
 
-const rows = ref([]);
+import { showSuccessToast, showDeleteConfirmationDialog } from "@/helpers/alert.js";
 const userStore = useUserStore();
+const rows = ref([]);
+const userModalRef = ref(null);
+const selectedUser = ref(null);
+const userModalTitle = ref("");
 
 const getUsers = async () => {
     await userStore.getUsers();
-    if (userStore.users) {
-        rows.value = userStore.users || [];
-    } else {
-        rows.value = [];
-    }
+    rows.value = userStore.users || [];
 };
+
 const searchData = async () => {
     await userStore.changePage(1);
-    await getUsers();
 };
+
 const paginate = async (page) => {
     await userStore.changePage(page);
     await getUsers();
 };
 
-onMounted(() => {
-    getUsers();
-});
-
-// ** Aturan Validasi **
-const rules = {
-    name: { required },
-    email: { required, email },
-    password: { required, minLength: minLength(6) }, // Min 6 karakter
-};
-
-const imageUrl = ref("");
-const croppedImageUrl = ref("");
-const formModel = reactive({
-    id: "",
-    name: "",
-    email: "",
-    password: "",
-    photo: "",
-});
-const userModalRef = ref(null);
-var userModalTitle = ref(false);
 const openUserModal = (mode, id = null) => {
     userModalRef.value.openModal();
     if (mode === "edit" && id) {
-        const user = rows.value.find((user) => user.id === id);
-        if (user) {
-            formModel.id = user.id;
-            formModel.name = user.name;
-            formModel.email = user.email;
-            formModel.password = ""; // Password should be handled securely
-            userModalTitle.value = "Ubah User";
-            imageUrl.value = user.photo_url;
-        }
+        selectedUser.value = rows.value.find((user) => user.id === id);
+        userModalTitle.value = "Ubah User";
     } else {
-        formModel.id = "";
-        formModel.name = "";
-        formModel.email = "";
-        formModel.password = "";
-        formModel.photo = "";
+        selectedUser.value = null;
         userModalTitle.value = "Tambah User";
-        imageUrl.value = "";
+    }
+};
+const formUserRef = ref(null);
+const submitUserModal = () => {
+    if (formUserRef.value) {
+        formUserRef.value.saveUser();  // Panggil fungsi saveUser() di FormUser
     }
 };
 
-// Fungsi untuk menutup modal dari luar komponen modal
 const closeUserModal = () => {
     userModalRef.value.closeModal();
 };
-// Fungsi untuk menutup modal dari luar komponen modal
-const afterCloseUserModal = () => {
-};
 
-const statusCode = computed(() => userStore.response.status);
-const errorList = computed(() => userStore.response?.error || {});
-const errorMessage = computed(() => userStore.response?.message || "");
-const v$ = useVuelidate(rules, formModel);
-
-const saveUser = async () => {
-
-    const isValid = await v$.value.$validate(); // Cek validasi
-    if (!isValid) {
-        showErrorToast("Periksa kembali inputan Anda.");
-        return;
-    }
-    try {
-        if (formModel.id) {
-            await userStore.updateUser(formModel);
-            if (statusCode.value != 200) {
-                showErrorToast("Failed to add user", errorMessage.value);
-            } else {
-                await getUsers(); // Refresh the user list after deletion
-                closeUserModal();
-                showSuccessToast("User Edited successfully!");
-            }
-        } else {
-            await userStore.addUsers(formModel);
-            if (statusCode.value != 200) {
-                showErrorToast("Failed to add user", errorMessage.value);
-            } else {
-                await getUsers(); // Refresh the user list after deletion
-                closeUserModal();
-                showSuccessToast("User added successfully!");
-            }
-        }
-    } catch (error) {
-        console.error(error);
-        showErrorToast("Failed to add user", errorMessage.value);
-    }
-};
 const deleteUser = async (id) => {
-    // Tampilkan dialog konfirmasi
     const confirmed = await showDeleteConfirmationDialog();
-
-    // Jika konfirmasi
     if (confirmed) {
         try {
             await userStore.deleteUser(id);
             showSuccessToast("User berhasil dihapus");
-            await getUsers(); // Refresh the user list after deletion
+            await getUsers();
         } catch (error) {
-            showErrorToast("Terjadi kesalahan saat menghapus user");
+            console.error(error);
         }
     }
 };
 
-const options = [
-    { label: "Option 1", value: "option1" },
-    { label: "Option 2", value: "option2" },
-    { label: "Option 3", value: "option3" },
-];
+onMounted(() => {
+    getUsers();
+});
 </script>
 
 <template>
@@ -174,79 +94,25 @@ const options = [
                         <Button @click="openUserModal('add')" variant="solid" color="primary">
                             Tambah User
                         </Button>
-
-                        <!-- Modal -->
-                        <Modal ref="userModalRef" @close="afterCloseUserModal">
-                            <!-- Slot Judul -->
+                        <!-- Modal Form -->
+                        <Modal ref="userModalRef">
                             <template #title>
-                                <h1 class="text-xl text-slate-800 font-bold">{{ userModalTitle }}</h1>
+                                <h1 class="text-xl font-bold">{{ userModalTitle }}</h1>
                             </template>
-
-                            <!-- Slot Body -->
                             <template #body>
-                                <!-- Input Foto -->
-                                <div class="mb-4">
-                                    <label class="text-sm text-slate-800 font-bold mb-2">Foto</label>
-                                    <ImageCropper :imageUrl="imageUrl" :aspectRatio="16 / 9" :inputAspectRatio="true"
-                                        uploadText="Letakkan foto disini atau klik untuk mengunggah"
-                                        @update:imageUrl="imageUrl = $event"
-                                        @update:croppedImageUrl="croppedImageUrl = $event; formModel.photo = $event;" />
-                                    <div v-if="errorList?.photo" class="text-red-500 text-xs">
-                                        <span v-for="(err, index) in errorList.photo" :key="index">
-                                            {{ err }}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Input Nama -->
-                                <div class="mb-4">
-                                    <InputField v-model="formModel.name" label="Nama" type="text"
-                                        placeholder="Masukkan Nama" name="name" :errors="errorList?.name" />
-
-                                    <div v-if="v$.name.$error" class="text-red-500 text-xs">
-                                        <span v-for="(err, index) in v$.name.$errors" :key="index">
-                                            {{ err.$message }}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Input Email -->
-                                <div class="mb-4">
-                                    <InputField v-model="formModel.email" label="Email" type="email"
-                                        placeholder="Masukkan Email" name="email" :errors="errorList?.email" />
-
-                                    <div v-if="v$.email.$error" class="text-red-500 text-xs">
-                                        <span v-for="(err, index) in v$.email.$errors" :key="index">
-                                            {{ err.$message }}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Input Password -->
-                                <div class="mb-4">
-                                    <InputField v-model="formModel.password" label="Password" type="password"
-                                        placeholder="Masukkan Password" name="password" :errors="errorList?.password" />
-
-                                    <div v-if="v$.password.$error" class="text-red-500 text-xs">
-                                        <span v-for="(err, index) in v$.password.$errors" :key="index">
-                                            {{ err.$message }}
-                                        </span>
-                                    </div>
-                                </div>
+                                <FormUser ref="formUserRef" :user="selectedUser" @refresh="getUsers" @close="closeUserModal" />
                             </template>
-
-                            <!-- Slot Footer (Tombol Simpan) -->
                             <template #footer>
-                                <Button @click="closeUserModal" variant="outline" color="secondary">
-                                    Close
-                                </Button>
-
-                                <Button @click="saveUser" variant="solid" color="primary">
-                                    Submit
-                                </Button>
+                                <div class="flex justify-end gap-2">
+                                    <Button @click="closeUserModal" variant="outline" color="secondary">
+                                        Close
+                                    </Button>
+                                    <Button @click="submitUserModal" variant="solid" color="primary">
+                                        Submit
+                                    </Button>
+                                </div>
                             </template>
                         </Modal>
-
 
                     </div>
                 </div>

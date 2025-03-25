@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require("tailwindcss/colors");
+
 module.exports = {
     darkMode: ["class"],
     content: [
@@ -6,6 +8,7 @@ module.exports = {
         "./src/views/**/*.{ts,tsx,vue}",
         "./src/components/**/*.{ts,tsx,vue}",
         "./src/**/**/*.{ts,tsx,vue}",
+        "./node_modules/vue-tailwind-datepicker/**/*.js",
     ],
     theme: {
         extend: {
@@ -29,15 +32,34 @@ module.exports = {
                 sm: "calc(var(--radius) - 4px)",
             },
             colors: {
+                "vtd-primary": colors.sky,
+                "vtd-secondary": colors.gray,
+        
                 background: "hsl(210, 40%, 98%)", // Latar belakang terang
                 foreground: "hsl(210, 20%, 20%)", // Teks utama
 
                 primary: {
-                    DEFAULT: "hsl(193, 58%, 40%)", // #2c8ca4
-                    foreground: "hsl(0, 0%, 100%)", // Putih
+                    DEFAULT: "hsl(193, 58%, 40%)",
+                    foreground: "hsl(0, 0%, 100%)",
                 },
                 secondary: {
-                    DEFAULT: "hsl(193, 50%, 30%)", // Lebih gelap dari primary
+                    DEFAULT: "hsl(193, 50%, 30%)",
+                    foreground: "hsl(0, 0%, 100%)",
+                },
+                info: {
+                    DEFAULT: "hsl(220, 80%, 60%)", // Biru cerah
+                    foreground: "hsl(0, 0%, 100%)",
+                },
+                success: {
+                    DEFAULT: "hsl(130, 70%, 40%)", // Hijau sukses
+                    foreground: "hsl(0, 0%, 100%)",
+                },
+                warning: {
+                    DEFAULT: "hsl(45, 90%, 50%)", // Kuning peringatan
+                    foreground: "hsl(0, 0%, 10%)",
+                },
+                danger: {
+                    DEFAULT: "hsl(0, 80%, 50%)", // Merah bahaya
                     foreground: "hsl(0, 0%, 100%)",
                 },
                 accent: {

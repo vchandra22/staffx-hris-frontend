@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
             extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
         },
         optimizeDeps: {
-            include: ["quill"],
+            include: ["quill","@ckeditor/ckeditor5-vue", "@ckeditor/ckeditor5-build-classic"],
         },
         preview: {
             port: parseInt(env.VITE_APP_PREVIEW_PORT) || 8081,
