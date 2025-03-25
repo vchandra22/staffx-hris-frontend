@@ -7,7 +7,6 @@ import { Toaster, toast } from "vue-sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { HeartHandshake, Moon, Sun, Eye, EyeOff } from "lucide-vue-next";
 import {
     Card,
     CardContent,

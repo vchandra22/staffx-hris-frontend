@@ -3,7 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import pinia from "@/state/pinia";
 import VueApexCharts from "vue3-apexcharts";
-import vClickOutside from "click-outside-vue3";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import VueProgressBar from "@aacassandra/vue3-progressbar";
 import "./assets/index.css";
@@ -45,7 +44,6 @@ const app = createApp(App)
     .use(router)
     // .use(require("vue-chartist"))
     .use(VueApexCharts)
-    .use(vClickOutside)
     .use(VueProgressBar, optionsProgressBar)
     .use(registerScrollSpy)
     .directive("maska", vMaska)
