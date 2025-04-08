@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, defineProps, defineEmits, watch } from "vue";
+import { ref, reactive, computed, watch } from "vue";
 import { required, email, minLength } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import { useUserStore } from "@/state/pinia";
@@ -101,6 +101,9 @@ defineExpose({
 
         <div class="mb-4">
             <InputField v-model="formModel.password" label="Password" type="password" placeholder="Masukkan Password" />
+            <div v-if="v$.password.$error" class="text-red-500 text-xs">
+                <span v-for="(err, index) in v$.password.$errors" :key="index">{{ err.$message }}</span>
+            </div>
         </div>
 
         <!-- <div class="flex justify-end gap-2">

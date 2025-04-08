@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref, watch, defineProps, defineEmits } from "vue";
+import { ref, watch } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 

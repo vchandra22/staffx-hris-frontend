@@ -1,8 +1,7 @@
 import { getCurrentInstance } from "vue";
 
 function getProgressInstance() {
-    const instance = getCurrentInstance();
-    return instance?.appContext.config.globalProperties.$Progress || window.$Progress;
+    return window.$Progress || getCurrentInstance()?.appContext.config.globalProperties.$Progress;
 }
 
 // Inisialisasi global jika belum ada
@@ -13,6 +12,9 @@ if (!window.$Progress) {
 export function setProgressInstance(progress) {
     window.$Progress = progress;
 }
+
+// Pastikan `getProgressInstance` diekspor dengan benar
+export { getProgressInstance };
 
 export default {
     start() {

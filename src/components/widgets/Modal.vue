@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, defineExpose, defineEmits } from "vue";
+import { ref, computed } from "vue";
 
 const isModalOpen = ref(false);
 const emit = defineEmits(["close"]);

@@ -86,7 +86,7 @@ onMounted(() => {
                         data-orientation="horizontal">
                         <div class="relative w-full md:w-72">
                             <InputField v-model="userStore.searchQuery" placeholder="Search..." name="search"
-                                @input="searchData" />
+                                v-debounce:500="searchData"/>
                         </div>
                     </div>
                     <div class="w-full md:w-72 flex justify-end">

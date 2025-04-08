@@ -1,51 +1,61 @@
-import axios from 'axios';
-import { showErrorToast, showConfirmationDialog } from '@/helpers/alert';
+import axios from "axios";
+import { showErrorToast, showConfirmationDialog } from "@/helpers/alert";
 import { useAuthStore } from "@/state/pinia";
-import app from "../main"; // import the instance
+import { getProgressInstance } from "@/helpers/progress"; // Pastikan helper ini ada
+
 export function axiosInterceptors() {
-  const auth = useAuthStore();
+    setTimeout(() => { // Pastikan store siap sebelum dipakai
+        const auth = useAuthStore();
+        const progress = getProgressInstance(); // Ambil instance progress
 
-  axios.interceptors.request.use(config => {
-      const token = auth.getToken();
+        axios.interceptors.request.use(config => {
+            const token = auth.getToken();
 
-      if (token) {
-          config.headers['Authorization'] = `Bearer ${token}`;
-      }
+            if (token) {
+                config.headers["Authorization"] = `Bearer ${token}`;
+            }
 
-      if (!config.headers['Content-Type']) {
-          config.headers['Content-Type'] = 'application/json';
-      }
+            if (!config.headers["Content-Type"]) {
+                config.headers["Content-Type"] = "application/json";
+            }
 
-      config.headers['Accept'] = 'application/json';
+            config.headers["Accept"] = "application/json";
 
-      app.$Progress.start(); // Memulai progress bar sebelum request dikirim
+            if (progress) progress.start(); // Memulai progress bar
 
-      return config;
-  }, error => {
-      app.$Progress.fail(); // Progress merah jika request error
-      showErrorToast('Request Error', 'Terjadi kesalahan pada request');
-      return Promise.reject(error);
-  });
+            // Set timeout untuk mendeteksi koneksi lambat (3 detik)
+            config.timeout = 3000;
 
-  axios.interceptors.response.use(response => {
-      app.$Progress.finish(); // Selesaikan progress jika request berhasil
-      return response;
-  }, async error => {
-      app.$Progress.fail(); // Progress merah jika response error
+            return config;
+        }, error => {
+            if (progress) progress.fail(); // Jika error, progress merah
+            showErrorToast("Request Error", "Terjadi kesalahan pada request");
+            return Promise.reject(error);
+        });
 
-      if (error.response && [403, 401].includes(error.response.status)) {
-          const confirmed = await showConfirmationDialog(
-              'Ooops',
-              error.response.data.errors[0] || 'Terjadi kesalahan pada response'
-          );
-          if (confirmed) {
-              await auth.logout();
-              window.location.reload();
-          }
-      } else {
-          showErrorToast('Error', 'Terjadi kesalahan pada response');
-      }
+        axios.interceptors.response.use(response => {
+            if (progress) progress.finish(); // Selesaikan progress jika sukses
+            return response;
+        }, async error => {
+            if (progress) progress.fail(); // Jika error, progress merah
 
-      return Promise.reject(error);
-  });
+            if (error.code === "ECONNABORTED") {
+                showErrorToast("Request Time Out", "Jaringan lambat, coba lagi.");
+            } else if (error.response && [403, 401].includes(error.response.status)) {
+                const confirmed = await showConfirmationDialog(
+                    "Ooops",
+                    error.response.data.errors?.[0] || "Terjadi kesalahan pada response"
+                );
+                if (confirmed) {
+                    await auth.logout();
+                    window.location.reload();
+                }
+            } else {
+                showErrorToast("Error", "Terjadi kesalahan pada response");
+            }
+
+            return Promise.reject(error);
+        });
+
+    }, 100); // Delay untuk memastikan Pinia siap
 }

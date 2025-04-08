@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import ProgressHelper from "@/helpers/progress";
 
 export const useUserStore = defineStore("user", {
     state: () => ({
@@ -29,7 +28,6 @@ export const useUserStore = defineStore("user", {
             this.user = user;
         },
         async getUsers() {
-            ProgressHelper.start()
             try {
                 const url = `${this.apiUrl}/v1/users?page=${this.current}&per_page=${this.perpage}&name=${this.searchQuery}`;
                 const res = await axios.get(url);
@@ -37,9 +35,7 @@ export const useUserStore = defineStore("user", {
                 this.users = usersDataList;
                 this.totalData = res.data.data.meta.total;
                 this.totalPage = Math.ceil(this.totalData / this.perpage);
-                ProgressHelper.finish();
             } catch (error) {
-                ProgressHelper.fail()
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
@@ -58,15 +54,12 @@ export const useUserStore = defineStore("user", {
         },
         async register(users) {
             try {
-                ProgressHelper.start()
                 const res = await axios.post(`${this.apiUrl}/v1/users`, users);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
                 };
-                ProgressHelper.finish();
             } catch (error) {
-                ProgressHelper.fail()
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
@@ -82,7 +75,6 @@ export const useUserStore = defineStore("user", {
                     status: res.status,
                     message: res.data.message,
                 };
-                ProgressHelper.finish();
             } catch (error) {
                 this.response = {
                     status: error.status,
@@ -95,16 +87,13 @@ export const useUserStore = defineStore("user", {
         },
 
         async addUsers(users) {
-            ProgressHelper.start()
             try {
                 const res = await axios.post(`${this.apiUrl}/v1/users`, users);
                 this.response = {
                     status: res.status,
                     message: res.data.message
                 };
-                ProgressHelper.finish();
             } catch (error) {
-                ProgressHelper.fail()
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
@@ -115,16 +104,13 @@ export const useUserStore = defineStore("user", {
             }
         },
         async deleteUser(id) {
-            ProgressHelper.start()
             try {
                 const res = await axios.delete(`${this.apiUrl}/v1/users/${id}`);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
                 };
-                ProgressHelper.finish();
             } catch (error) {
-                ProgressHelper.fail()
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
