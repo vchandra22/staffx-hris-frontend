@@ -10,6 +10,11 @@ import Button from "@/components/widgets/Button";
 import Input from "@/components/widgets/Input";
 import Card from "@/components/widgets/Card";
 import ImageCropper from "@/components/widgets/Cropper";
+import ApexChart from "@/components/widgets/Apexchart";
+
+const currencyFormatter = (val) => `Rp ${val.toLocaleString()}`;
+const percentageFormatter = (val) => `${val}%`;
+const tooltipFormat = (val, label) => `${label}: ${val}`;
 
 const selectedItem = ref(null); // Untuk single select
 const selectedItems = ref([]); // Untuk multi select
@@ -46,6 +51,97 @@ const email = ref("");
         <div class="">
             Welcome to dashboard
         </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <!-- Line Chart -->
+            <ApexChart type="line" title="Tren Pengunjung" :categories="['Jan', 'Feb', 'Mar', 'Apr']" :series="[
+                { name: 'Desktop', data: [30, 40, 35, 50] },
+                { name: 'Mobile', data: [20, 30, 25, 45] }
+            ]" :yAxisFormatter="currencyFormatter" :tooltipFormatter="tooltipFormat" />
+
+            <!-- Area Chart -->
+            <ApexChart type="area" title="Traffic Harian" :categories="['Sen', 'Sel', 'Rab', 'Kam']" :series="[
+                { name: 'User Aktif', data: [100, 200, 150, 250] }
+            ]" :colors="['#00C49F']" />
+
+            <!-- Column Chart -->
+            <ApexChart type="column" title="Penjualan Bulanan" :categories="['Jan', 'Feb', 'Mar']" :series="[
+                { name: 'Produk A', data: [400, 700, 500] }
+            ]" :yAxisFormatter="currencyFormatter" />
+
+            <!-- Bar Chart -->
+            <ApexChart type="bar" title="Skor Siswa" :categories="['Ali', 'Budi', 'Cici']" :series="[
+                { name: 'Nilai', data: [85, 90, 78] }
+            ]" :yAxisFormatter="val => `${val}/100`" />
+
+            <!-- Pie Chart -->
+            <ApexChart type="pie" title="Distribusi Jenis Kelamin" :categories="['Laki-laki', 'Perempuan']"
+                :series="[60, 40]" :colors="['#42A5F5', '#EF5350']" />
+
+            <!-- Donut Chart -->
+            <ApexChart type="donut" title="Market Share" :categories="['Brand A', 'Brand B', 'Brand C']"
+                :series="[40, 35, 25]" :colors="['#008FFB', '#00E396', '#FEB019']" />
+
+            <!-- RadialBar Chart -->
+            <ApexChart type="radialBar" title="Progress Target" :categories="['Target Tercapai']" :series="[75]"
+                :yAxisFormatter="percentageFormatter" />
+
+            <!-- PolarArea Chart -->
+            <ApexChart type="polarArea" title="Skor Departemen" :categories="['HR', 'Tech', 'Sales', 'Marketing']"
+                :series="[80, 90, 70, 60]" />
+
+            <!-- Heatmap -->
+            <ApexChart type="heatmap" title="Aktivitas Mingguan" :categories="['Sen', 'Sel', 'Rab', 'Kam', 'Jum']"
+                :series="[
+                    {
+                        name: 'Minggu 1',
+                        data: [10, 20, 30, 40, 50]
+                    },
+                    {
+                        name: 'Minggu 2',
+                        data: [20, 10, 40, 30, 60]
+                    }
+                ]" :colors="['#FF5722']" />
+
+            <!-- Bubble Chart -->
+            <ApexChart type="bubble" title="Distribusi Ukuran Produk" :series="[
+                {
+                    name: 'Produk A',
+                    data: [
+                        { x: 10, y: 20, z: 15 },
+                        { x: 20, y: 30, z: 20 }
+                    ]
+                }
+            ]" />
+
+            <!-- Candlestick Chart -->
+            <ApexChart type="candlestick" title="Harga Saham" :series="[
+                {
+                    data: [
+                        {
+                            x: new Date('2023-01-01'),
+                            y: [51, 55, 50, 54]
+                        },
+                        {
+                            x: new Date('2023-01-02'),
+                            y: [54, 56, 52, 55]
+                        }
+                    ]
+                }
+            ]" />
+
+            <!-- Radar Chart -->
+            <ApexChart type="radar" title="Kemampuan Tim"
+                :categories="['Komunikasi', 'Teknik', 'Problem Solving', 'Leadership']" :series="[
+                    {
+                        name: 'Tim A',
+                        data: [80, 85, 75, 90]
+                    },
+                    {
+                        name: 'Tim B',
+                        data: [70, 78, 82, 88]
+                    }
+                ]" />
+        </div>
         <div class="tab-group">
             <div class="tab-container" role="tablist">
                 <div class="tab-indicator"></div>
@@ -66,59 +162,59 @@ const email = ref("");
         </div>
 
         <div data-stepper-container data-initial-step="1" class="stepper-container">
-  <div class="stepper">
-    <div aria-disabled="false" data-step class="group step">  <!-- Tambahkan `group` di HTML -->
-      <div class="relative">
-        <span class="step-circle">1</span>
-      </div>
-      <div class="step-line"></div>
-    </div>
-    <div aria-disabled="true" data-step class="group step">  <!-- Tambahkan `group` di HTML -->
-      <div class="relative">
-        <span class="step-circle">2</span>
-      </div>
-      <div class="step-line"></div>
-    </div>
-    <div aria-disabled="true" data-step class="group step">  <!-- Tambahkan `group` di HTML -->
-      <div class="relative">
-        <span class="step-circle">3</span>
-      </div>
-    </div>
-  </div>
+            <div class="stepper">
+                <div aria-disabled="false" data-step class="group step"> <!-- Tambahkan `group` di HTML -->
+                    <div class="relative">
+                        <span class="step-circle">1</span>
+                    </div>
+                    <div class="step-line"></div>
+                </div>
+                <div aria-disabled="true" data-step class="group step"> <!-- Tambahkan `group` di HTML -->
+                    <div class="relative">
+                        <span class="step-circle">2</span>
+                    </div>
+                    <div class="step-line"></div>
+                </div>
+                <div aria-disabled="true" data-step class="group step"> <!-- Tambahkan `group` di HTML -->
+                    <div class="relative">
+                        <span class="step-circle">3</span>
+                    </div>
+                </div>
+            </div>
 
-  <div class="mt-8">
-    <div data-step-content="1" class="step-content active">
-      <p class="text-xl font-semibold mb-4">Step 1 Content</p>
-      <p class="text-slate-500">This is the content for step 1. Add whatever content you need here.</p>
-    </div>
-    <div data-step-content="2" class="step-content">
-      <p class="text-xl font-semibold mb-4">Step 2 Content</p>
-      <p class="text-slate-500">This is the content for step 2. Add whatever content you need here.</p>
-    </div>
-    <div data-step-content="3" class="step-content">
-      <p class="text-xl font-semibold mb-4">Step 3 Content</p>
-      <p class="text-slate-500">This is the content for step 3. Add whatever content you need here.</p>
-    </div>
-  </div>
+            <div class="mt-8">
+                <div data-step-content="1" class="step-content active">
+                    <p class="text-xl font-semibold mb-4">Step 1 Content</p>
+                    <p class="text-slate-500">This is the content for step 1. Add whatever content you need here.</p>
+                </div>
+                <div data-step-content="2" class="step-content">
+                    <p class="text-xl font-semibold mb-4">Step 2 Content</p>
+                    <p class="text-slate-500">This is the content for step 2. Add whatever content you need here.</p>
+                </div>
+                <div data-step-content="3" class="step-content">
+                    <p class="text-xl font-semibold mb-4">Step 3 Content</p>
+                    <p class="text-slate-500">This is the content for step 3. Add whatever content you need here.</p>
+                </div>
+            </div>
 
-  <div class="mt-6 flex w-full justify-between gap-4">
-    <button data-stepper-prev class="step-btn">Previous</button>
-    <button data-stepper-next class="step-btn">Next</button>
-  </div>
-</div>
+            <div class="mt-6 flex w-full justify-between gap-4">
+                <button data-stepper-prev class="step-btn">Previous</button>
+                <button data-stepper-next class="step-btn">Next</button>
+            </div>
+        </div>
 
 
 
-<div class="dropdown" data-placement="bottom-start">
-  <button data-toggle="dropdown" aria-expanded="false" class="btn-dropdown">
-    Open
-  </button>
-  <div data-role="menu" class="dropdown-menu hidden  ">
-    <a href="#" class="dropdown-item">Add Team</a>
-    <a href="#" class="dropdown-item">Add Project</a>
-    <a href="#" class="dropdown-item">My Profile</a>
-  </div>
-</div>
+        <div class="dropdown" data-placement="bottom-start">
+            <button data-toggle="dropdown" aria-expanded="false" class="btn-dropdown">
+                Open
+            </button>
+            <div data-role="menu" class="dropdown-menu hidden  ">
+                <a href="#" class="dropdown-item">Add Team</a>
+                <a href="#" class="dropdown-item">Add Project</a>
+                <a href="#" class="dropdown-item">My Profile</a>
+            </div>
+        </div>
 
 
         <div class="">
@@ -184,11 +280,13 @@ const email = ref("");
         <div class="">
             <div class="mb-4 pb-2">
 
-                        <ImageCropper :aspectRatio="16 / 9" :inputAspectRatio="true" :text="'Letakkan gambar disini atau klik untuk mengunggah'"/>
+                <ImageCropper :aspectRatio="16 / 9" :inputAspectRatio="true"
+                    :text="'Letakkan gambar disini atau klik untuk mengunggah'" />
             </div>
             <div class="mb-4 pb-2">
 
-                        <ImageCropper :aspectRatio="16 / 9" :inputAspectRatio="true" :multiple=true :text="'Letakkan gambar disini atau klik untuk mengunggah secara banyak'"/>
+                <ImageCropper :aspectRatio="16 / 9" :inputAspectRatio="true" :multiple=true
+                    :text="'Letakkan gambar disini atau klik untuk mengunggah secara banyak'" />
             </div>
 
             <!-- Input Teks -->
