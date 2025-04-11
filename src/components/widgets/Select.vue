@@ -1,13 +1,25 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
+type OptionValue = string | number | boolean;
 
-const props = defineProps({
-    modelValue: [String, Array, null], // Bisa single atau multiple select
-    label: String,
-    placeholder: String,
-    options: Array, // Bisa berupa array string atau array objek [{ value: "", label: "" }]
-    multiple: Boolean, // Jika true, multi-select aktif
-    errors: Array,
+type SelectOption = string | {
+  value: OptionValue;
+  label: string;
+};
+
+interface SelectProps {
+  modelValue?: string | string[] | null;       // Bisa single atau multiple select
+  label?: string;
+  placeholder?: string;
+  options?: SelectOption[];                    // Array string atau array objek
+  multiple?: boolean;
+  errors?: string[];
+}
+const props = withDefaults(defineProps<SelectProps>(), {
+  placeholder: "",
+  multiple: false,
+  options: () => [],
+  errors: () => []
 });
 
 const emit = defineEmits(["update:modelValue"]);

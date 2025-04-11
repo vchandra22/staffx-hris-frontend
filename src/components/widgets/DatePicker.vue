@@ -1,43 +1,41 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import Datepicker from "vue-tailwind-datepicker";
+interface DatePickerProps {
+  modelValue?: string | string[] | Date;
+  label?: string;
+  placeholder?: string;
+  format?: string; // default: "YYYY-MM-DD"
+  range?: boolean; // default: false
+  weekStart?: number; // default: 0
+  autoApply?: boolean; // default: true
+  i18n?: {
+    language: string;
+    months: string[];
+    weekdays: string[];
+    cancel: string;
+    clear: string;
+    done: string;
+  }; // default: bahasa Indonesia
+  errors?: any[]; // bisa ditambahkan typing lebih spesifik kalau perlu
+}
 
-const props = defineProps({
-    modelValue: [String, Array, Date],
-    label: String,
-    placeholder: String,
-    format: {
-        type: String,
-        default: "YYYY-MM-DD",
-    },
-    range: {
-        type: Boolean,
-        default: false, // false = Single Date, true = Range Date
-    },
-    weekStart: {
-        type: Number,
-        default: 0, // 0 = Sunday, 1 = Monday
-    },
-    autoApply: {
-        type: Boolean,
-        default: true,
-    },
-    i18n: {
-        type: Object,
-        default: () => ({
-            // Default bahasa Indonesia
-            language: "id",
-            months: [
-                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-                "Juli", "Agustus", "September", "Oktober", "November", "Desember",
-            ],
-            weekdays: ["Ming", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
-            cancel: "Batal",
-            clear: "Bersihkan",
-            done: "Selesai",
-        }),
-    },
-    errors: Array,
+const props = withDefaults(defineProps<DatePickerProps>(), {
+  format: "YYYY-MM-DD",
+  range: false,
+  weekStart: 0,
+  autoApply: true,
+  i18n: () => ({
+    language: "id",
+    months: [
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+    ],
+    weekdays: ["Ming", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+    cancel: "Batal",
+    clear: "Bersihkan",
+    done: "Selesai",
+  })
 });
 
 const emit = defineEmits(["update:modelValue"]);

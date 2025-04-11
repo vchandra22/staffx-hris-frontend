@@ -7,7 +7,7 @@ import Button from "@/components/widgets/Button";
 import InputField from "@/components/widgets/Input";
 import FormUser from "@/views/user/form.vue"; // Import file FormUser
 
-import { showSuccessToast, showDeleteConfirmationDialog } from "@/helpers/alert.js";
+import { showSuccessToast, showDeleteConfirmationDialog } from "@/helpers/alert";
 const userStore = useUserStore();
 const rows = ref([]);
 const userModalRef = ref(null);

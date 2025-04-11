@@ -111,7 +111,7 @@
     </template>
   </template>
   
-  <script>
+  <script lang="ts">
   import VueCropper from "vue-cropperjs";
   import "cropperjs/dist/cropper.css";
   import Modal from "@/components/widgets/Modal.vue";
@@ -119,11 +119,20 @@
   import InputField from "@/components/widgets/Input";
   import Button from "@/components/widgets/Button";
   
+  interface ImageUploaderProps {
+  imageUrl?: string;
+  imageUrls?: string[];
+  aspectRatio?: number; // default: 1
+  text?: string; // default: "Letakkan gambar disini atau klik untuk mengunggah"
+  inputAspectRatio?: boolean; // default: false
+  multiple?: boolean; // default: false
+}
   export default {
     name: "ImageCropper",
     components: { VueCropper, Modal, InputField, Button },
     props: {
       imageUrl: String,
+      imageUrls: Array,
       aspectRatio: { type: Number, default: 1 },
       text: { type: String, default: "Letakkan gambar disini atau klik untuk mengunggah" },
       inputAspectRatio: { type: Boolean, default: false },
@@ -160,7 +169,16 @@
             }
           }
         }
+      },
+
+  imageUrls: {
+    immediate: true,
+    handler(newVal) {
+      if (Array.isArray(newVal) && this.multiple) {
+        this.images = [...newVal];
       }
+    }
+  }
     },
     methods: {
       onDragOver() { this.isDragging = true; },

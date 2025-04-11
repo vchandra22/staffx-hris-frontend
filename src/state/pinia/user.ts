@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import type { IUser } from "@/types/User";
 
 export const useUserStore = defineStore("user", {
     state: () => ({
         apiUrl: import.meta.env.VITE_APP_APIURL,
-        users: [],
-        user: null,
+        users: [] as IUser[],
+        user: null as IUser | null,
         response: {
             status: null,
             message: null,
@@ -52,7 +53,7 @@ export const useUserStore = defineStore("user", {
             this.current = 1;
             await this.getUsers();
         },
-        async register(users) {
+        async register(users : IUser) {
             try {
                 const res = await axios.post(`${this.apiUrl}/v1/users`, users);
                 this.response = {
@@ -68,7 +69,7 @@ export const useUserStore = defineStore("user", {
             }
             
         },
-        async updateUser(users) {
+        async updateUser(users : IUser) {
             try {
                 const res = await axios.put(`${this.apiUrl}/v1/users/${users.id}`, users);
                 this.response = {
@@ -86,7 +87,7 @@ export const useUserStore = defineStore("user", {
             }
         },
 
-        async addUsers(users) {
+        async addUsers(users : IUser) {
             try {
                 const res = await axios.post(`${this.apiUrl}/v1/users`, users);
                 this.response = {

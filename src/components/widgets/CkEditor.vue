@@ -17,22 +17,26 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const CKEditorComponent = CKEditor.component;
 
-const props = defineProps({
-    modelValue: String,
-    label: String,
-    placeholder: String,
-    errors: Array,
-    editorConfig: Object, // Tambahkan props untuk konfigurasi editor
-});
+interface CKEditorProps {
+  modelValue?: string;
+  label?: string;
+  placeholder?: string;
+  errors?: any[]; // Atau bisa diganti ke tipe error tertentu kalau kamu punya
+  editorConfig?: Record<string, any>; // Bisa diganti dengan tipe spesifik CKEditor config kalau perlu
+}
 
-const emit = defineEmits(["update:modelValue"]);
+const props = defineProps<CKEditorProps>();
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void;
+}>();
 
 const editorData = ref(props.modelValue || "");
 

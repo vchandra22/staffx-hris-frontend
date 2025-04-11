@@ -1,28 +1,25 @@
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, nextTick  } from 'vue';
 
 import VueApexCharts from 'vue3-apexcharts';
 
-const props = defineProps({
-  type: { type: String, required: true },
-  series: { type: [Array, Object], required: true },
-  categories: { type: Array, default: () => [] },
+// Definisikan interface props DI LUAR <script setup>
+interface ChartProps {
+  type: string;
+  series: any[] | Record<string, any>;
+  categories?: string[];
+  title?: string;
+  subtitle?: string;
+  colors?: string[];
+  loading?: boolean;
+  noDataText?: string;
+  tooltipFormatter?: (value: any, label?: string, index?: number) => string;
+  labelFormatter?: (val: any) => string;
+  yAxisFormatter?: (val: any) => string;
+  drilldownSeries?: any[];
+}
 
-  // Basic Info
-  title: String,
-  subtitle: String,
-  colors: { type: Array, default: () => ['#1E88E5', '#D32F2F', '#7CB342'] },
-  loading: Boolean,
-  noDataText: { type: String, default: 'Data tidak tersedia' },
-
-  // Formatters
-  tooltipFormatter: Function,
-  labelFormatter: Function,
-  yAxisFormatter: Function,
-
-  // Drilldown
-  drilldownSeries: Array,
-});
+const props = defineProps<ChartProps>();
 
 const emit = defineEmits(['data-clicked']);
 

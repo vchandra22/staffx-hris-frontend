@@ -44,6 +44,8 @@ const gender = ref("");
 const password = ref("");
 const email = ref("");
 
+const croppedSingleImage = ref("")
+const croppedMultipleImages = ref([])
 </script>
 
 <template>
@@ -280,13 +282,28 @@ const email = ref("");
         <div class="">
             <div class="mb-4 pb-2">
 
-                <ImageCropper :aspectRatio="16 / 9" :inputAspectRatio="true"
-                    :text="'Letakkan gambar disini atau klik untuk mengunggah'" />
+                <!-- Single Image Cropper -->
+                <ImageCropper v-model:croppedImageUrl="croppedSingleImage" :aspectRatio="16 / 9"
+                    :inputAspectRatio="true" :text="'Letakkan gambar disini atau klik untuk mengunggah'" />
+                <div v-if="croppedSingleImage">
+                    <p>Result:</p>
+                    <img :src="croppedSingleImage" alt="Hasil Crop" class="max-w-md mt-2 border rounded" />
+                </div>
             </div>
             <div class="mb-4 pb-2">
 
-                <ImageCropper :aspectRatio="16 / 9" :inputAspectRatio="true" :multiple=true
+
+                <!-- Multiple Image Cropper -->
+                <ImageCropper v-model:croppedImageUrl="croppedMultipleImages" :aspectRatio="16 / 9"
+                    :inputAspectRatio="true" :multiple="true"
                     :text="'Letakkan gambar disini atau klik untuk mengunggah secara banyak'" />
+                <div v-if="croppedMultipleImages.length">
+                    <p>Result:</p>
+                    <div class="flex flex-wrap gap-4 mt-2">
+                        <img v-for="(img, index) in croppedMultipleImages" :key="index" :src="img" alt="Hasil Crop"
+                            class="max-w-xs border rounded" />
+                    </div>
+                </div>
             </div>
 
             <!-- Input Teks -->

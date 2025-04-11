@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, computed, watch } from "vue";
 import { required, email, minLength } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
@@ -6,16 +6,17 @@ import { useUserStore } from "@/state/pinia";
 import InputField from "@/components/widgets/Input";
 import Button from "@/components/widgets/Button";
 import ImageCropper from "@/components/widgets/Cropper";
-import { showSuccessToast, showErrorToast } from "@/helpers/alert.js";
+import { showSuccessToast, showErrorToast } from "@/helpers/alert";
+import type { IUser } from "@/types/User";
 
 const userStore = useUserStore();
 const emits = defineEmits(["refresh", "close"]);
 
-const props = defineProps({
-    user: Object
-});
+const props = defineProps<{
+  user: IUser | null;
+}>();
 
-const formModel = reactive({
+const formModel = reactive<IUser>({
     id: "",
     name: "",
     email: "",

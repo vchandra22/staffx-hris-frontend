@@ -24,19 +24,20 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
 const isModalOpen = ref(false);
 const emit = defineEmits(["close"]);
+type SizeOption = "sm" | "md" | "lg" | "xl" | "full";
+
+interface ModalProps {
+  size?: SizeOption; // default: "md"
+}
 
 // Definisi props
-const props = defineProps({
-  size: {
-    type: String,
-    default: "md",
-    validator: (value) => ["sm", "md", "lg", "xl", "full"].includes(value),
-  },
+const props = withDefaults(defineProps<ModalProps>(), {
+  size: "md"
 });
 
 // Mapping ukuran modal ke class Tailwind

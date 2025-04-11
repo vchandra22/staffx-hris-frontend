@@ -1,13 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
 import { QuillEditor } from "@vueup/vue-quill";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
-const props = defineProps({
-    modelValue: String, // Nilai teks dalam editor
-    label: String, // Label input
-    placeholder: String, // Placeholder dalam editor
-    errors: Array, // Untuk menampilkan error
+interface QuillProps {
+  modelValue?: string;       // Nilai teks dalam editor
+  label?: string;            // Label input
+  placeholder?: string;      // Placeholder dalam editor
+  errors?: any[];            // Bisa diperketat ke string[] jika hanya pesan teks
+}
+const props = withDefaults(defineProps<QuillProps>(), {
+  placeholder: "",
+  errors: () => []
 });
 
 const emit = defineEmits(["update:modelValue"]);

@@ -10,7 +10,7 @@ Venturo Vue Tailwind Material Skeleton adalah kerangka kerja untuk membangun apl
 - **Pinia** - State management untuk Vue 3
 
 ## Persyaratan
-- **Node.js v22.14.0**
+- **Node.ts v22.14.0**
 - **npm 10.9.2** atau **Yarn**
 
 ## Instalasi
@@ -65,24 +65,24 @@ VENTURO-VUE-TAILWIND-MATERIAL-SKELETON
 │   │   ├── Quill.vue
 │   │   ├── Select.vue
 │   ├── core/interceptor
-│   │   ├── axios-interceptor.js
+│   │   ├── axios-interceptor.ts
 │   ├── helpers/authservice
-│   │   ├── auth-header.js
-│   │   ├── user.service.js
+│   │   ├── auth-header.ts
+│   │   ├── user.service.ts
 │   ├── helpers
-│   │   ├── alert.js
-│   │   ├── progress.js
+│   │   ├── alert.ts
+│   │   ├── progress.ts
 │   ├── layouts
 │   │   ├── main.vue
 │   │   ├── navigation.vue
 │   ├── router
-│   │   ├── index.js
-│   │   ├── routes.js
+│   │   ├── index.ts
+│   │   ├── routes.ts
 │   ├── state
 │   │   ├── pinia
-│   │   │   ├── auth.js
-│   │   │   ├── user.js
-│   │   │   ├── pinia.js
+│   │   │   ├── auth.ts
+│   │   │   ├── user.ts
+│   │   │   ├── pinia.ts
 │   ├── views
 │   │   ├── auth
 │   │   ├── dashboard
@@ -91,9 +91,9 @@ VENTURO-VUE-TAILWIND-MATERIAL-SKELETON
 │   │   ├── utility
 │   │   │   ├── 404.vue
 │   ├── App.vue
-│   ├── authUtils.js
-│   ├── i18n.js
-│   ├── main.js
+│   ├── authUtils.ts
+│   ├── i18n.ts
+│   ├── main.ts
 ├── .env
 ├── .gitignore
 ├── Dockerfile
@@ -101,8 +101,8 @@ VENTURO-VUE-TAILWIND-MATERIAL-SKELETON
 ├── Dockerfile.staging
 ├── index.html
 ├── package.json
-├── tailwind.config.js
-├── vite.config.js
+├── tailwind.config.ts
+├── vite.config.ts
 └── README.md
 ```
 
@@ -139,7 +139,7 @@ const selectedItem = ref(null);
 ## Manajemen State dengan Pinia
 Proyek ini menggunakan **Pinia** untuk manajemen state. Berikut contoh store untuk autentikasi:
 ```js
-// src/state/pinia/auth.js
+// src/state/pinia/auth.ts
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
@@ -165,7 +165,7 @@ export const useAuthStore = defineStore('auth', {
 ## Informasi Tambahan
 - **Docker Support:** Proyek ini memiliki konfigurasi Docker untuk lingkungan pengembangan dan staging.
 - **i18n:** Mendukung multiple language menggunakan Vue I18n.
-- **Interceptor Axios:** Menggunakan `axios-interceptor.js` untuk menangani permintaan API secara global.
+- **Interceptor Axios:** Menggunakan `axios-interceptor.ts` untuk menangani permintaan API secara global.
 
 ## Lisensi
 Proyek ini dilisensikan di bawah MIT License.

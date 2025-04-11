@@ -1,15 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import { mdiEye, mdiEyeOff } from "@mdi/js";
-
-const props = defineProps({
-    modelValue: [String, Number, Boolean, Array],
-    label: String,
-    type: String, // "textarea", "checkbox", "select", "radio", "password"
-    placeholder: String,
-    options: Array, // Untuk select, radio, dan checkbox (jika multiple)
-    errors: Array,
-});
+interface InputFieldProps {
+  modelValue?: string | number | boolean | any[];
+  label?: string;
+  type?: string; // e.g., "textarea", "checkbox", "select", "radio", "password"
+  placeholder?: string;
+  options?: any[]; // bisa diperjelas jika kamu tahu bentuk opsinya (e.g., { label: string, value: any }[])
+  errors?: any[]; // bisa juga diperjelas tergantung struktur error-nya
+}
+const props = defineProps<InputFieldProps>();
 
 const emit = defineEmits(["update:modelValue"]);
 const showPassword = ref(false);

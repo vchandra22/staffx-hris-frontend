@@ -34,41 +34,18 @@
   </component>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
+interface ButtonProps {
+  variant?: 'ghost' | 'solid' | 'gradient' | 'outline';
+  color?: 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
+  href?: string | null;
+  type?: 'button' | 'submit' | 'reset' | string;
+  isLoading?: boolean;
+  class?: string;
+}
 
-const props = defineProps({
-  variant: {
-    type: String,
-    default: "solid",
-    validator: (value) =>
-      ["ghost", "solid", "gradient", "outline"].includes(value),
-  },
-  color: {
-    type: String,
-    default: "primary",
-    validator: (value) =>
-      ["primary", "secondary", "info", "success", "warning", "error"].includes(
-        value
-      ),
-  },
-  href: {
-    type: String,
-    default: null,
-  },
-  type: {
-    type: String,
-    default: "button",
-  },
-  isLoading: {
-    type: Boolean,
-    default: false,
-  },
-  class: {
-    type: String,
-    default: "",
-  },
-});
+const props = defineProps<ButtonProps>();
 
 // Warna dasar
 const baseColors = {

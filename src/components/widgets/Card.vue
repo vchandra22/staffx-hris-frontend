@@ -17,21 +17,13 @@
     </div>
   </template>
   
-  <script setup>
-  // Combine all the props into one call
-  const props = defineProps({
-    headerClass: {
-      type: String,
-      default: ''
-    },
-    bodyClass: {
-      type: String,
-      default: ''
-    },
-    footerClass: {
-      type: String,
-      default: ''
-    }
-  });
+  <script setup lang="ts">
+  
+  interface CardProps {
+  headerClass?: string;
+  bodyClass?: string;
+  footerClass?: string;
+}
+const props = defineProps<CardProps>();
   </script>
   
