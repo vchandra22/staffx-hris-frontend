@@ -1,15 +1,16 @@
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import axios from "axios";
-import type { IUser } from "../../types/User";
-export const useUserStore = defineStore("user", {
+import type { IPosition } from "../../types/Position";
+
+export const usePositionStore = defineStore("position", {
     state: () => ({
-        apiUrl: import.meta.env.VITE_APP_APIURL,
-        users: [] as IUser[],
-        user: null as IUser | null,
+        apiUrl: "http://localhost:8000/api",
+        positions: [] as IPosition[],
+        position: null as IPosition | null,
         response: {
-            status: null,
-            message: null,
-            error: [],
+            status: null as number | null,
+            message: null as string | null,
+            error: [] as any[],
         },
         modalAction: {
             action: "",
@@ -23,106 +24,96 @@ export const useUserStore = defineStore("user", {
         searchQuery: "",
     }),
     actions: {
-        openForm(newAction, user) {
+        openForm(newAction: string, position: IPosition | null) {
             this.modalAction.action = newAction;
-            this.user = user;
+            this.position = position;
         },
-        async getUsers() {
+        async getPositions() {
             try {
-                const url = `${this.apiUrl}/v1/users?page=${this.current}&per_page=${this.perpage}&name=${this.searchQuery}`;
+                const url = `${this.apiUrl}/v1/positions?page=${this.current}&per_page=${this.perpage}&name=${this.searchQuery}`;
                 const res = await axios.get(url);
-                const usersDataList = res.data.data.list;
-                this.users = usersDataList;
+                const positionsDataList = res.data.data.list;
+                this.positions = positionsDataList;
                 this.totalData = res.data.data.meta.total;
                 this.totalPage = Math.ceil(this.totalData / this.perpage);
-            } catch (error) {
+            } catch (error: any) {
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
+                    error: error.response?.data?.errors || [],
                 };
             }
-            
         },
-        async changePage(newPage) {
+        async changePage(newPage: number) {
             this.current = newPage;
-            await this.getUsers();
+            await this.getPositions();
         },
-        async searchUsers(query) {
+        async searchPositions(query: string) {
             this.searchQuery = query;
             this.current = 1;
-            await this.getUsers();
+            await this.getPositions();
         },
-        async register(users : IUser) {
+        async createPosition(position: IPosition) {
             try {
-                const res = await axios.post(`${this.apiUrl}/v1/users`, users);
+                const res = await axios.post(`${this.apiUrl}/v1/positions`, position);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
+                    error: [],
                 };
-            } catch (error) {
+                return true;
+            } catch (error: any) {
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
-                    error: error.response.data.errors,
+                    error: error.response?.data?.errors || [],
                 };
+                return false;
+            } finally {
+                await this.getPositions();
             }
-            
         },
-        async updateUser(users : IUser) {
+        async updatePosition(position: IPosition) {
             try {
-                const res = await axios.put(`${this.apiUrl}/v1/users/${users.id}`, users);
+                const res = await axios.put(`${this.apiUrl}/v1/positions/${position.id}`, position);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
+                    error: [],
                 };
-            } catch (error) {
-                this.response = {
-                    status: error.status,
-                    message: error.message,
-                    error: error.response.data.errors,
-                };
-            } finally {
-                this.getUsers();
-            }
-        },
-
-        async addUsers(users : IUser) {
-            try {
-                const res = await axios.post(`${this.apiUrl}/v1/users`, users);
-                this.response = {
-                    status: res.status,
-                    message: res.data.message
-                };
-            } catch (error) {
+                return true;
+            } catch (error: any) {
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
-                    error: error.response.data.errors,
+                    error: error.response?.data?.errors || [],
                 };
+                return false;
             } finally {
-                this.getUsers();
+                await this.getPositions();
             }
         },
-        async deleteUser(id) {
+        async deletePosition(id: string) {
             try {
-                const res = await axios.delete(`${this.apiUrl}/v1/users/${id}`);
+                const res = await axios.delete(`${this.apiUrl}/v1/positions/${id}`);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
+                    error: [],
                 };
-            } catch (error) {
+            } catch (error: any) {
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
-                    error: error.response.data.errors,
+                    error: error.response?.data?.errors || [],
                 };
             } finally {
-                this.getUsers();
+                await this.getPositions();
             }
         },
         resetState() {
-            this.users = [];
-            this.user = null;
+            this.positions = [];
+            this.position = null;
             this.response = {
                 status: null,
                 message: null,

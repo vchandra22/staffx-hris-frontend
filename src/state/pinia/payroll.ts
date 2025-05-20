@@ -1,15 +1,16 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import type { IUser } from "../../types/User";
-export const useUserStore = defineStore("user", {
+import { IPayroll } from "../../types/Payroll";
+
+export const usePayrollStore = defineStore("payroll", {
     state: () => ({
         apiUrl: import.meta.env.VITE_APP_APIURL,
-        users: [] as IUser[],
-        user: null as IUser | null,
+        payrolls: [] as IPayroll[],
+        payroll: null as IPayroll | null,
         response: {
-            status: null,
-            message: null,
-            error: [],
+            status: null as number | null,
+            message: null as string | null,
+            error: [] as any[],
         },
         modalAction: {
             action: "",
@@ -23,106 +24,96 @@ export const useUserStore = defineStore("user", {
         searchQuery: "",
     }),
     actions: {
-        openForm(newAction, user) {
+        openForm(newAction: string, payroll: IPayroll | null) {
             this.modalAction.action = newAction;
-            this.user = user;
+            this.payroll = payroll;
         },
-        async getUsers() {
+        async getPayrolls() {
             try {
-                const url = `${this.apiUrl}/v1/users?page=${this.current}&per_page=${this.perpage}&name=${this.searchQuery}`;
+                const url = `${this.apiUrl}/v1/payrolls?page=${this.current}&per_page=${this.perpage}&name=${this.searchQuery}`;
                 const res = await axios.get(url);
-                const usersDataList = res.data.data.list;
-                this.users = usersDataList;
+                const payrollsDataList = res.data.data.list;
+                this.payrolls = payrollsDataList;
                 this.totalData = res.data.data.meta.total;
                 this.totalPage = Math.ceil(this.totalData / this.perpage);
-            } catch (error) {
+            } catch (error: any) {
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
+                    error: error.response?.data?.errors || [],
                 };
             }
-            
         },
-        async changePage(newPage) {
+        async changePage(newPage: number) {
             this.current = newPage;
-            await this.getUsers();
+            await this.getPayrolls();
         },
-        async searchUsers(query) {
+        async searchPayrolls(query: string) {
             this.searchQuery = query;
             this.current = 1;
-            await this.getUsers();
+            await this.getPayrolls();
         },
-        async register(users : IUser) {
+        async createPayroll(payroll: IPayroll) {
             try {
-                const res = await axios.post(`${this.apiUrl}/v1/users`, users);
+                const res = await axios.post(`${this.apiUrl}/v1/payrolls`, payroll);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
+                    error: [],
                 };
-            } catch (error) {
+                return true;
+            } catch (error: any) {
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
-                    error: error.response.data.errors,
+                    error: error.response?.data?.errors || [],
                 };
+                return false;
+            } finally {
+                await this.getPayrolls();
             }
-            
         },
-        async updateUser(users : IUser) {
+        async updatePayroll(payroll: IPayroll) {
             try {
-                const res = await axios.put(`${this.apiUrl}/v1/users/${users.id}`, users);
+                const res = await axios.put(`${this.apiUrl}/v1/payrolls/${payroll.id}`, payroll);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
+                    error: [],
                 };
-            } catch (error) {
-                this.response = {
-                    status: error.status,
-                    message: error.message,
-                    error: error.response.data.errors,
-                };
-            } finally {
-                this.getUsers();
-            }
-        },
-
-        async addUsers(users : IUser) {
-            try {
-                const res = await axios.post(`${this.apiUrl}/v1/users`, users);
-                this.response = {
-                    status: res.status,
-                    message: res.data.message
-                };
-            } catch (error) {
+                return true;
+            } catch (error: any) {
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
-                    error: error.response.data.errors,
+                    error: error.response?.data?.errors || [],
                 };
+                return false;
             } finally {
-                this.getUsers();
+                await this.getPayrolls();
             }
         },
-        async deleteUser(id) {
+        async deletePayroll(id: string) {
             try {
-                const res = await axios.delete(`${this.apiUrl}/v1/users/${id}`);
+                const res = await axios.delete(`${this.apiUrl}/v1/payrolls/${id}`);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
+                    error: [],
                 };
-            } catch (error) {
+            } catch (error: any) {
                 this.response = {
                     status: error.response?.status,
                     message: error.message,
-                    error: error.response.data.errors,
+                    error: error.response?.data?.errors || [],
                 };
             } finally {
-                this.getUsers();
+                await this.getPayrolls();
             }
         },
         resetState() {
-            this.users = [];
-            this.user = null;
+            this.payrolls = [];
+            this.payroll = null;
             this.response = {
                 status: null,
                 message: null,

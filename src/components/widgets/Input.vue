@@ -24,13 +24,13 @@ const computedModelValue = computed(() => {
 
 <template>
     <div class="space-y-1.5">
-        <label class="text-sm text-slate-800 font-bold capitalize" v-if="label">{{ label }}</label>
+        <label class="text-sm text-slate-800 font-regular capitalize" v-if="label">{{ label }}</label>
         <div class="relative">
 
             <!-- Textarea -->
             <textarea v-if="type === 'textarea'" :placeholder="placeholder" :value="modelValue"
                 @input="emit('update:modelValue', $event.target.value)"
-                class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-sm hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10"></textarea>
+                class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-none hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10"></textarea>
 
             <!-- Checkbox (Multiple) -->
             <div v-else-if="type === 'checkbox' && options" class="flex flex-col gap-1">
@@ -55,7 +55,7 @@ const computedModelValue = computed(() => {
             <!-- Select -->
             <select v-else-if="type === 'select'" :value="modelValue"
                 @change="emit('update:modelValue', $event.target.value)"
-                class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-sm hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10">
+                class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-none hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10">
                 <option disabled selected value="">Pilih salah satu</option>
                 <option v-for="(option, index) in options" :key="index" :value="option.value">{{ option.label }}
                 </option>
@@ -75,7 +75,7 @@ const computedModelValue = computed(() => {
             <div v-else-if="type === 'password'" class="relative">
                 <input :type="showPassword ? 'text' : 'password'" :placeholder="placeholder" :value="modelValue"
                     @input="emit('update:modelValue', $event.target.value)"
-                    class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-sm hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10" />
+                    class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-none hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10" />
                 <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
                     @click="togglePasswordVisibility">
                     <svg class="h-5 w-5" viewBox="0 0 24 24">
@@ -87,7 +87,7 @@ const computedModelValue = computed(() => {
             <!-- Default Input -->
             <input v-else :type="type" :placeholder="placeholder" :value="modelValue"
                 @input="emit('update:modelValue', $event.target.value)"
-                class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-sm hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10" />
+                class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-none hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10" />
         </div>
 
         <!-- Error Messages -->

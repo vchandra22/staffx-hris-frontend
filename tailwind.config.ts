@@ -32,65 +32,65 @@ module.exports = {
                 sm: "calc(var(--radius) - 4px)",
             },
             colors: {
-                "vtd-primary": colors.sky,
-                "vtd-secondary": colors.gray,
-        
-                background: "hsl(210, 40%, 98%)", // Latar belakang terang
-                foreground: "hsl(210, 20%, 20%)", // Teks utama
+                "vtd-primary": colors.emerald, // Menggunakan emerald sebagai base untuk primary
+                "vtd-secondary": colors.slate, // Menggunakan slate sebagai base untuk secondary
+
+                background: "hsl(210, 20%, 98%)", // Warna latar light (dari #E5E7EB)
+                foreground: "hsl(220, 13%, 13%)", // Warna teks dark (dari #1C242E)
 
                 primary: {
-                    DEFAULT: "hsl(193, 58%, 40%)",
+                    DEFAULT: "hsl(158, 64%, 33%)", // #0E9F6E
                     foreground: "hsl(0, 0%, 100%)",
                 },
                 secondary: {
-                    DEFAULT: "hsl(193, 50%, 30%)",
+                    DEFAULT: "hsl(220, 13%, 13%)", // #1C242E
                     foreground: "hsl(0, 0%, 100%)",
                 },
                 info: {
-                    DEFAULT: "hsl(220, 80%, 60%)", // Biru cerah
+                    DEFAULT: "hsl(220, 80%, 60%)", // Biru cerah (tetap)
                     foreground: "hsl(0, 0%, 100%)",
                 },
                 success: {
-                    DEFAULT: "hsl(130, 70%, 40%)", // Hijau sukses
+                    DEFAULT: "hsl(158, 64%, 33%)", // Menggunakan warna primary
                     foreground: "hsl(0, 0%, 100%)",
                 },
                 warning: {
-                    DEFAULT: "hsl(45, 90%, 50%)", // Kuning peringatan
+                    DEFAULT: "hsl(43, 74%, 66%)", // Warna kuning dari chart-4 (#E5E7EB disesuaikan)
                     foreground: "hsl(0, 0%, 10%)",
                 },
                 danger: {
-                    DEFAULT: "hsl(0, 80%, 50%)", // Merah bahaya
+                    DEFAULT: "hsl(0, 85%, 60%)", // #EF4444
                     foreground: "hsl(0, 0%, 100%)",
                 },
                 accent: {
-                    DEFAULT: "hsl(193, 70%, 50%)", // Lebih terang dari primary
+                    DEFAULT: "hsl(158, 64%, 43%)", // Lebih terang dari primary
                     foreground: "hsl(0, 0%, 100%)",
                 },
                 muted: {
-                    DEFAULT: "hsl(193, 25%, 70%)", // Versi lebih soft dari primary
-                    foreground: "hsl(193, 25%, 30%)",
+                    DEFAULT: "hsl(220, 9%, 46%)", // #6B7280
+                    foreground: "hsl(220, 13%, 13%)", // #1C242E
                 },
                 destructive: {
-                    DEFAULT: "hsl(0, 80%, 50%)", // Warna merah untuk aksi berbahaya
+                    DEFAULT: "hsl(0, 85%, 60%)", // #EF4444
                     foreground: "hsl(0, 0%, 100%)",
                 },
-                border: "hsl(210, 20%, 80%)",
-                input: "hsl(210, 20%, 90%)",
-                ring: "hsl(193, 58%, 40%)", // Warna primary untuk focus rings
+                border: "hsl(220, 13%, 90%)", // Light border
+                input: "hsl(220, 13%, 90%)", // Light input
+                ring: "hsl(158, 64%, 33%)", // Warna primary untuk focus rings
                 card: {
                     DEFAULT: "hsl(0, 0%, 100%)",
-                    foreground: "hsl(210, 20%, 20%)",
+                    foreground: "hsl(220, 13%, 13%)",
                 },
                 popover: {
                     DEFAULT: "hsl(0, 0%, 100%)",
-                    foreground: "hsl(210, 20%, 20%)",
+                    foreground: "hsl(220, 13%, 13%)",
                 },
                 chart: {
-                    1: "hsl(193, 58%, 40%)", // Primary
-                    2: "hsl(340, 80%, 50%)", // Reddish tone
-                    3: "hsl(45, 90%, 50%)", // Yellow tone
-                    4: "hsl(220, 80%, 50%)", // Blue tone
-                    5: "hsl(130, 70%, 40%)", // Green tone
+                    1: "hsl(158, 64%, 33%)", // Primary (#0E9F6E)
+                    2: "hsl(220, 13%, 13%)", // Secondary (#1C242E)
+                    3: "hsl(220, 9%, 46%)",  // Muted (#6B7280)
+                    4: "hsl(220, 14%, 96%)", // Light (#E5E7EB)
+                    5: "hsl(0, 85%, 60%)",   // Danger (#EF4444)
                 },
             },
         },

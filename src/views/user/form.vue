@@ -81,7 +81,7 @@ defineExpose({
 <template>
     <div>
         <div class="mb-4">
-            <label class="text-sm font-bold">Foto</label>
+            <label class="text-sm font-regular">Foto</label>
             <ImageCropper :imageUrl="imageUrl" :aspectRatio="16 / 9" :inputAspectRatio="true"
                 @update:imageUrl="imageUrl = $event" @update:croppedImageUrl="croppedImageUrl = $event; formModel.photo = $event;" />
         </div>

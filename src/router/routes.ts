@@ -25,6 +25,30 @@ export default [
         component: () => import("../views/user"),
     },
     {
+        path: "/departments",
+        name: "departments",
+        meta: { title: "Department Page", authRequired: true },
+        component: () => import("../views/department"),
+    },
+    {
+        path: "/positions",
+        name: "positions",
+        meta: { title: "Positions Page", authRequired: true },
+        component: () => import("../views/position"),
+    },
+    {
+        path: "/employees",
+        name: "employees",
+        meta: { title: "Employee Page", authRequired: true },
+        component: () => import("../views/employee"),
+    },
+    {
+        path: "/payrolls",
+        name: "payrolls",
+        meta: { title: "Payroll Page", authRequired: true },
+        component: () => import("../views/payroll"),
+    },
+    {
         path: "/login",
         name: "login",
         component: () => import("../views/auth/login"),

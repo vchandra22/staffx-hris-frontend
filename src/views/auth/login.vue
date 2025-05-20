@@ -1,22 +1,22 @@
 <script setup>
-import { reactive, computed, ref } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/state/pinia";
-import { useColorMode } from "@vueuse/core";
-import { Toaster, toast } from "vue-sonner";
-import { mdiEye, mdiEyeOff, mdiGoogle } from "@mdi/js";
+import {computed, reactive, ref} from "vue";
+import {useRouter} from "vue-router";
+import {useAuthStore} from "@/state/pinia";
+import {useColorMode} from "@vueuse/core";
+import {toast, Toaster} from "vue-sonner";
+import {mdiEye, mdiEyeOff} from "@mdi/js";
 
 const showPassword = ref(false);
 const mode = useColorMode({
-  emitAuto: false, // Supaya tidak otomatis pakai sistem OS
-  modes: {
-    light: "light",
-    dark: "dark",
-  },
+    emitAuto: false, // Supaya tidak otomatis pakai sistem OS
+    modes: {
+        light: "light",
+        dark: "dark",
+    },
 });
 
 if (!mode.value) {
-  mode.value = "light"; // Set default ke "light"
+    mode.value = "light"; // Set default ke "light"
 }
 const router = useRouter();
 const authStore = useAuthStore();
@@ -57,7 +57,7 @@ const login = async () => {
             duration: 3000,
             class: "bg-green-500 text-white border-none shadow-lg",
         });
-        setTimeout(function() {
+        setTimeout(function () {
             console.log("Hello World!");
             if (user.role === "user") {
                 router.push("/");
@@ -70,16 +70,16 @@ const login = async () => {
 </script>
 
 <template>
-    <div class="flex min-h-screen items-center justify-center bg-gray-100 p-6">
-        <div class="w-full max-w-md bg-white shadow-md rounded-lg p-6">
+    <div class="flex min-h-screen items-center justify-center bg-slate-50 p-6">
+        <div class="w-full max-w-md bg-white shadow-sm rounded-md p-6">
             <div class="flex items-center gap-2 justify-center mb-6">
-                <h1 class="text-xl font-bold text-gray-800">Venturo.</h1>
+                <img src="../../assets/logo-staffx.webp" class="w-44 h-auto">
             </div>
 
             <h2 class="text-lg font-semibold text-center text-gray-700 mb-4">Welcome back</h2>
             <!-- <p class="text-sm text-center text-gray-500 mb-6">Login with your account or Google account</p>
 
-            <button class="w-full flex items-center justify-center gap-2 p-2 border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-100">
+            <button class="w-full flex items-center justify-center gap-2 p-2 border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-white">
                 <svg class="h-5 w-5" viewBox="0 0 24 24">
                     <path :d="mdiGoogle" fill="currentColor" />
                 </svg>
@@ -94,7 +94,7 @@ const login = async () => {
                 <div class="mb-4 space-y-1.5">
                     <label class="text-sm text-slate-800 font-bold">Email</label>
                     <input v-model="formModel.email" type="email" placeholder="Masukkan Email"
-                        class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-sm hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10" />
+                           class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-sm hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10"/>
                     <div v-if="errorList?.email" class="text-red-500 text-xs">
                         <span v-for="(err, index) in errorList.email" :key="index">
                             {{ err }}
@@ -105,11 +105,13 @@ const login = async () => {
                 <div class="mb-4 space-y-1.5">
                     <label class="text-sm text-slate-800 font-bold">Password</label>
                     <div class="relative">
-                        <input v-model="formModel.password" :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Password"
-                            class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-sm hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10" />
-                        <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600" @click="togglePassword">
+                        <input v-model="formModel.password" :type="showPassword ? 'text' : 'password'"
+                               placeholder="Masukkan Password"
+                               class="w-full border border-slate-200 rounded-md py-2 px-2.5 text-sm shadow-sm hover:border-slate-800 focus:border-slate-800 focus:ring focus:ring-slate-800/10"/>
+                        <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
+                                @click="togglePassword">
                             <svg class="h-5 w-5" viewBox="0 0 24 24">
-                                <path :d="showPassword ? mdiEyeOff : mdiEye" fill="currentColor" />
+                                <path :d="showPassword ? mdiEyeOff : mdiEye" fill="currentColor"/>
                             </svg>
                         </button>
                     </div>
@@ -121,7 +123,8 @@ const login = async () => {
                 </div>
 
                 <div class="flex items-center justify-between text-sm">
-                    <router-link to="/forgot-password" class="text-primary hover:underline">Forgot Password?</router-link>
+                    <router-link to="/forgot-password" class="text-primary hover:underline">Forgot Password?
+                    </router-link>
                 </div>
 
                 <button type="submit" class="w-full bg-primary text-white font-bold py-2 rounded-md mt-4">
@@ -142,5 +145,5 @@ const login = async () => {
         </div>
     </div>
 
-    <Toaster />
+    <Toaster/>
 </template>
