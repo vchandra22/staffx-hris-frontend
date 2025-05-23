@@ -140,8 +140,8 @@ onMounted(() => {
                             <th class="cursor-pointer px-2.5 py-2 text-start font-medium"><small
                                 class="font-sans antialiased text-sm text-current flex items-center justify-between gap-2 opacity-70">Salary</small>
                             </th>
-                            <th class="cursor-pointer px-2.5 py-2 text-start font-medium"><small
-                                class="font-sans antialiased text-sm text-current flex items-center justify-between gap-2 opacity-70">Action</small></th>
+                            <th class="cursor-pointer px-2.5 py-2 text-end font-medium"><small
+                                class="font-sans antialiased text-sm text-current flex items-center justify-end gap-2 opacity-70">Action</small></th>
                         </tr>
                         </thead>
                         <tbody class="group text-sm text-gray-800 dark:text-white">

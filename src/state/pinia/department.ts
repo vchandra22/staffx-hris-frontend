@@ -4,7 +4,7 @@ import type {IDepartment} from "../../types/Department";
 
 export const useDepartmentStore = defineStore("department", {
     state: () => ({
-        apiUrl: "http://localhost:8000/api",
+        apiUrl: import.meta.env.VITE_APP_APIURL,
         departments: [] as IDepartment[],
         department: null as IDepartment | null,
         response: {

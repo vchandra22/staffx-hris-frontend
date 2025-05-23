@@ -1,12 +1,12 @@
-import {defineStore} from "pinia";
+import { defineStore } from "pinia";
 import axios from "axios";
-import type { IPosition } from "../../types/Position";
+import type { ILeaveType } from "../../types/LeaveType";
 
-export const usePositionStore = defineStore("position", {
+export const useLeaveTypeStore = defineStore("leaveType", {
     state: () => ({
         apiUrl: import.meta.env.VITE_APP_APIURL,
-        positions: [] as IPosition[],
-        position: null as IPosition | null,
+        leaveTypes: [] as ILeaveType[],
+        leaveType: null as ILeaveType | null,
         response: {
             status: null as number | null,
             message: null as string | null,
@@ -24,16 +24,16 @@ export const usePositionStore = defineStore("position", {
         searchQuery: "",
     }),
     actions: {
-        openForm(newAction: string, position: IPosition | null) {
+        openForm(newAction: string, leaveType: ILeaveType | null) {
             this.modalAction.action = newAction;
-            this.position = position;
+            this.leaveType = leaveType;
         },
-        async getPositions() {
+        async getLeaveTypes() {
             try {
-                const url = `${this.apiUrl}/v1/positions?page=${this.current}&per_page=${this.perpage}&name=${this.searchQuery}`;
+                const url = `${this.apiUrl}/v1/leave-types?page=${this.current}&per_page=${this.perpage}&name=${this.searchQuery}`;
                 const res = await axios.get(url);
-                const positionsDataList = res.data.data.list;
-                this.positions = positionsDataList;
+                const leaveTypesDataList = res.data.data.list;
+                this.leaveTypes = leaveTypesDataList;
                 this.totalData = res.data.data.meta.total;
                 this.totalPage = Math.ceil(this.totalData / this.perpage);
             } catch (error: any) {
@@ -46,16 +46,16 @@ export const usePositionStore = defineStore("position", {
         },
         async changePage(newPage: number) {
             this.current = newPage;
-            await this.getPositions();
+            await this.getLeaveTypes();
         },
-        async searchPositions(query: string) {
+        async searchLeaveTypes(query: string) {
             this.searchQuery = query;
             this.current = 1;
-            await this.getPositions();
+            await this.getLeaveTypes();
         },
-        async createPosition(position: IPosition) {
+        async createLeaveType(leaveType: ILeaveType) {
             try {
-                const res = await axios.post(`${this.apiUrl}/v1/positions`, position);
+                const res = await axios.post(`${this.apiUrl}/v1/leave-types`, leaveType);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
@@ -70,12 +70,12 @@ export const usePositionStore = defineStore("position", {
                 };
                 return false;
             } finally {
-                await this.getPositions();
+                await this.getLeaveTypes();
             }
         },
-        async updatePosition(position: IPosition) {
+        async updateLeaveType(leaveType: ILeaveType) {
             try {
-                const res = await axios.put(`${this.apiUrl}/v1/positions/${position.id}`, position);
+                const res = await axios.put(`${this.apiUrl}/v1/leave-types/${leaveType.id}`, leaveType);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
@@ -90,12 +90,12 @@ export const usePositionStore = defineStore("position", {
                 };
                 return false;
             } finally {
-                await this.getPositions();
+                await this.getLeaveTypes();
             }
         },
-        async deletePosition(id: string) {
+        async deleteLeaveType(id: string) {
             try {
-                const res = await axios.delete(`${this.apiUrl}/v1/positions/${id}`);
+                const res = await axios.delete(`${this.apiUrl}/v1/leave-types/${id}`);
                 this.response = {
                     status: res.status,
                     message: res.data.message,
@@ -108,12 +108,12 @@ export const usePositionStore = defineStore("position", {
                     error: error.response?.data?.errors || [],
                 };
             } finally {
-                await this.getPositions();
+                await this.getLeaveTypes();
             }
         },
         resetState() {
-            this.positions = [];
-            this.position = null;
+            this.leaveTypes = [];
+            this.leaveType = null;
             this.response = {
                 status: null,
                 message: null,

@@ -1,8 +1,12 @@
 import { IEmployee } from './Employee';
+import { IPosition } from './Position';
+import {IDepartment} from "./Department";
 
 export interface IPayroll {
     id: string;
     employee: IEmployee;
+    position: IPosition;
+    department: IDepartment;
     month: number;
     year: number;
     period: string;

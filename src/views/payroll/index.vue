@@ -1,12 +1,12 @@
 <script setup>
-import { usePayrollStore } from "@/state/pinia/payroll";
-import { onMounted, ref } from "vue";
+import {usePayrollStore} from "@/state/pinia/payroll";
+import {onMounted, ref} from "vue";
 import Layout from "@/layouts/main.vue";
 import Modal from "@/components/widgets/Modal.vue";
 import Button from "@/components/widgets/Button";
 import InputField from "@/components/widgets/Input";
 import FormPayroll from "@/views/payroll/form.vue";
-import { showDeleteConfirmationDialog, showSuccessToast } from "@/helpers/alert";
+import {showDeleteConfirmationDialog, showSuccessToast} from "@/helpers/alert";
 
 const payrollStore = usePayrollStore();
 const rows = ref([]);
@@ -94,7 +94,7 @@ onMounted(() => {
                             </template>
                             <template #body>
                                 <FormPayroll ref="formPayrollRef" :payroll="selectedPayroll"
-                                              @refresh="getPayrolls" @close="closePayrollModal"/>
+                                             @refresh="getPayrolls" @close="closePayrollModal"/>
                             </template>
                             <template #footer>
                                 <div class="flex justify-end gap-2">
@@ -111,15 +111,19 @@ onMounted(() => {
                 </div>
                 <div class="mt-4 w-full overflow-hidden rounded-sm border border-gray-200">
                     <table class="w-full">
-                        <thead class="border-b border-gray-200 bg-white text-sm font-medium text-secondary dark:bg-gray-900">
+                        <thead
+                            class="border-b border-gray-200 bg-white text-sm font-medium text-secondary dark:bg-gray-900">
                         <tr>
                             <th class="px-2.5 py-2 text-start font-medium">Employee</th>
-                            <th class="px-2.5 py-2 text-start font-medium">Period</th>
+                            <th class="px-2.5 py-2 text-start font-medium">Department</th>
+                            <th class="px-2.5 py-2 text-start font-medium">Position</th>
                             <th class="px-2.5 py-2 text-start font-medium">Base Salary</th>
-                            <th class="px-2.5 py-2 text-start font-medium">Overtime Pay</th>
+                            <th class="px-2.5 py-2 text-start font-medium">Overtime</th>
                             <th class="px-2.5 py-2 text-start font-medium">Deductions</th>
                             <th class="px-2.5 py-2 text-start font-medium">Net Salary</th>
-                            <th class="px-2.5 py-2 text-start font-medium">Action</th>
+                            <th class="px-2.5 py-2 text-start font-medium">Period</th>
+                            <th class="px-2.5 py-2 text-start font-medium">Created At</th>
+<!--                            <th class="px-2.5 py-2 text-end font-medium">Action</th>-->
                         </tr>
                         </thead>
                         <tbody class="group text-sm text-gray-800 dark:text-white">
@@ -128,18 +132,18 @@ onMounted(() => {
                                 v-for="row in payrollStore.payrolls"
                                 :key="row.id">
                                 <td class="p-3">
-                                    <div class="flex flex-col">
-                                        <small class="font-sans antialiased text-sm text-current">
-                                            {{ row.employee?.name || '-' }}
-                                        </small>
-                                        <small class="font-sans antialiased text-sm text-gray-500">
-                                            {{ row.employee?.department?.name || '-' }}
-                                        </small>
-                                    </div>
+                                    <small class="font-sans antialiased text-sm text-current">
+                                        {{ row.employee?.name || '-' }}
+                                    </small>
                                 </td>
                                 <td class="p-3">
-                                    <small class="font-sans antialiased text-sm text-current opacity-70">
-                                        {{ row.period || '-' }}
+                                    <small class="font-sans antialiased text-sm text-gray-500">
+                                        {{ row.employee?.department?.name || '-' }}
+                                    </small>
+                                </td>
+                                <td class="p-3">
+                                    <small class="font-sans antialiased text-sm text-gray-500">
+                                        {{ row.employee?.position?.name || '-' }}
                                     </small>
                                 </td>
                                 <td class="p-3">
@@ -163,15 +167,26 @@ onMounted(() => {
                                     </small>
                                 </td>
                                 <td class="p-3">
-                                    <div class="flex gap-2 justify-end">
-                                        <Button @click="openPayrollModal('edit', row.id)" variant="outline" color="secondary">
-                                            Edit
-                                        </Button>
-                                        <Button @click="deletePayroll(row.id)" variant="outline" color="error">
-                                            Delete
-                                        </Button>
-                                    </div>
+                                    <small class="font-sans antialiased text-sm text-current opacity-70">
+                                        {{ row.period || '-' }}
+                                    </small>
                                 </td>
+                                <td class="p-3">
+                                    <small class="font-sans antialiased text-sm text-current opacity-70">
+                                        {{ row.created_at || '-' }}
+                                    </small>
+                                </td>
+<!--                                <td class="p-3">-->
+<!--                                    <div class="flex gap-2 justify-end">-->
+<!--                                        <Button @click="openPayrollModal('edit', row.id)" variant="outline"-->
+<!--                                                color="secondary">-->
+<!--                                            Edit-->
+<!--                                        </Button>-->
+<!--                                        <Button @click="deletePayroll(row.id)" variant="outline" color="error">-->
+<!--                                            Delete-->
+<!--                                        </Button>-->
+<!--                                    </div>-->
+<!--                                </td>-->
                             </tr>
                         </template>
                         <tr v-else>
