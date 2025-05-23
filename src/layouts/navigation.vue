@@ -70,7 +70,14 @@
 <script setup>
 import {onMounted, onUnmounted, ref} from "vue";
 import {useRoute} from "vue-router";
-import {mdiAccountGroup, mdiAccountCash, mdiAccountMultiple, mdiDatabase, mdiHome} from "@mdi/js";
+import {
+    mdiAccountGroup,
+    mdiAccountCash,
+    mdiAccountMultiple,
+    mdiDatabase,
+    mdiHome,
+    mdiFileDocumentAlertOutline
+} from "@mdi/js";
 
 // Ambil route aktif
 const route = useRoute();
@@ -136,6 +143,7 @@ const menus = ref([
         submenu: [
             { label: "Departments", to: "/departments" },
             { label: "Positions", to: "/positions" },
+            { label: "Leave Type", to: "/leave-types" },
         ],
     },
     {

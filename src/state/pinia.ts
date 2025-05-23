@@ -4,6 +4,7 @@ import { useDepartmentStore } from "./pinia/department";
 import { usePositionStore } from "./pinia/position";
 import { useEmployeeStore } from "./pinia/employee";
 import { usePayrollStore } from "./pinia/payroll";
+import { useLeaveTypeStore } from "./pinia/leaveType";
 import { createPinia } from "pinia";
 
 const pinia = createPinia();
@@ -16,4 +17,5 @@ export {
     usePositionStore,
     useEmployeeStore,
     usePayrollStore,
+    useLeaveTypeStore,
 };

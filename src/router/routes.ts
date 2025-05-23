@@ -49,6 +49,12 @@ export default [
         component: () => import("../views/payroll"),
     },
     {
+        path: "/leave-types",
+        name: "Leave Types",
+        meta: { title: "Leave Type Page", authRequired: true },
+        component: () => import("../views/leave_type"),
+    },
+    {
         path: "/login",
         name: "login",
         component: () => import("../views/auth/login"),
